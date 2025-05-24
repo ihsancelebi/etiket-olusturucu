@@ -71,17 +71,12 @@
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(102,126,234,0.4);
     }
-    .preview-btn {
-      background: linear-gradient(45deg, #3498db, #2980b9);
-      margin-bottom: 10px;
-    }
-    .print-btn {
-      background: linear-gradient(45deg, #27ae60, #2ecc71);
-    }
+    .preview-btn { background: linear-gradient(45deg, #3498db, #2980b9); margin-bottom: 10px; }
+    .print-btn   { background: linear-gradient(45deg, #27ae60, #2ecc71); }
 
-    /* ---- Etiket tasarımı ---- */
+    /* --- Etiket kutusu --- */
     .label-preview {
-      position: relative;       /* kesim çizgileri için */
+      position: relative;      /* iç kesim çizgisi için */
       width: 113.39px;
       height: 226.77px;
       border: 1px solid #000;
@@ -90,19 +85,9 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
       align-items: center;
     }
-    /* Üstte kesim çizgisi */
-    .label-preview::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      border-bottom: 1px dashed #000;
-    }
-    /* Altta, 20mm yukarıda kesim çizgisi */
+    /* yalnızca alttan 20mm yukarıda kesim çizgisi */
     .label-preview::after {
       content: "";
       position: absolute;
@@ -113,11 +98,9 @@
     }
     .label-content {
       width: 100%;
-      /* üst padding sıfırlandı, logo üst çizgiye bitişik olsun */
-      padding: 0 5px 5px;
+      padding: 0 5px 5px;    /* üst padding sıfır, logo üst çizgiye bitişik */
       display: flex;
       flex-direction: column;
-      justify-content: space-around;
       align-items: center;
       text-align: center;
     }
@@ -128,34 +111,37 @@
       text-align: center;
     }
     .logo-image {
-      width: 100%;        /* tüm yatay alanı doldur */
+      width: 100%; 
       height: auto;
       object-fit: contain;
     }
+
     .length-section,
     .product-info,
     .barcode-section {
       width: auto;
-      margin: 0 auto;
+      margin: 5px auto;      /* biraz dikey boşluk */
       text-align: center;
     }
-    .length-section span,
-    .product-info span {
+    /* Renk satırı (tek satır) */
+    #renkText {
       display: inline-block;
-      margin: 0 auto;
       font-weight: bold;
     }
-    .length-section span {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 15px;
-      color: #000;
+    /* Gramaj – Fiyat tek satır (asla wrap olmaz) */
+    #detayText {
+      display: inline-block;
+      margin-top: 2px;
+      font-weight: bold;
+      white-space: nowrap;   /* kesinlikle tek satır */
     }
+
     .barcode-canvas {
       max-width: 100px;
       height: 30px;
-      margin: 0 auto;
+      margin: 5px auto 0;
     }
-    /* ---- Önizleme konteyneri ---- */
+
     .preview-container {
       display: flex;
       justify-content: center;
@@ -163,56 +149,36 @@
       flex-direction: column;
     }
 
-    /* Yazdırma ayarları */
+    /* --- Yazdırma ayarları --- */
     @media print {
-      body {
-        background: white;
-        margin: 0;
-        padding: 0;
-      }
-      .container, .preview-container {
-        display: none;
-      }
+      body { background: white; margin:0; padding:0; }
+      .container, .preview-container { display: none; }
       .label-preview-print-wrapper {
         display: block !important;
-        width: 40mm; height: 80mm;
+        width: 40mm;
+        height: 80mm;
         page-break-after: always;
-        margin: 0; padding: 0;
+        margin:0; padding:0;
       }
       .label-preview {
-        width: 40mm; height: 80mm;
-        border: 1px solid #000;
-        box-shadow: none;
-        margin: 0;
+        width: 40mm;
+        height: 80mm;
+        border:1px solid #000;
+        box-shadow:none;
+        margin:0;
       }
-      .label-preview::before,
-      .label-preview::after {
-        /* Yazdırmada da görünsün */
-        border-color: #000;
-      }
+      .label-preview::after { border-color:#000; }
       .label-content {
-        height: 60mm;
-        padding: 0 1.5mm 1.5mm;
+        padding:0 1.5mm 1.5mm;
       }
-      .length-section span,
-      .product-info span {
-        font-size: 4mm;
-      }
-      .barcode-canvas {
-        max-width: 35mm;
-        height: 8mm;
-      }
+      #detayText { font-size:4mm; }
+      .barcode-canvas { max-width:35mm; height:8mm; }
     }
 
-    /* Mobil uyumluluk */
+    /* --- Mobil uyumluluk --- */
     @media (max-width: 768px) {
-      body {
-        flex-direction: column;
-        align-items: center;
-      }
-      .container, .preview-container {
-        max-width: 100%; width: 100%;
-      }
+      body { flex-direction: column; align-items: center; }
+      .container, .preview-container { max-width:100%; width:100%; }
     }
   </style>
 </head>
@@ -242,7 +208,7 @@
       </div>
     </form>
     <button class="btn preview-btn" onclick="updatePreview()">Önizleme Güncelle</button>
-    <button class="btn print-btn" onclick="printLabel()">Yazdır</button>
+    <button class="btn print-btn"   onclick="printLabel()">Yazdır</button>
   </div>
 
   <div class="preview-container">
@@ -256,8 +222,8 @@
           <span id="uzunlukText">70 cm</span>
         </div>
         <div class="product-info">
-          <span id="renkText">Doğal</span>
-          <span id="detayText">0.8 gr - 110 TL</span>
+          <span id="renkText">Doğal</span><br>
+          <span id="detayText">0.8 gr – 110 TL</span>
         </div>
         <div class="barcode-section">
           <svg class="barcode-canvas" id="barcodeCanvas"></svg>
@@ -271,6 +237,7 @@
   <script>
     let labelCounter = 1;
     const elements = ['renk','uzunluk','gramaj','fiyat','stokNo'];
+
     function generateStockNo(){
       const d=new Date(),
             y=d.getFullYear().toString().slice(-2),
@@ -279,44 +246,71 @@
             cnt=String(labelCounter++).padStart(3,'0');
       return `IC${y}${m}${day}${cnt}`;
     }
+
     function updatePreview(){
-      const renk=document.getElementById('renk').value.trim(),
-            uzunluk=document.getElementById('uzunluk').value.trim(),
-            gramaj=document.getElementById('gramaj').value.trim(),
-            fiyat=document.getElementById('fiyat').value.trim(),
-            stokInput=document.getElementById('stokNo');
-      if(!stokInput.value.trim()) stokInput.value=generateStockNo();
-      document.getElementById('uzunlukText').textContent=`${uzunluk||'70'} cm`;
-      const renkEl=document.getElementById('renkText');
-      renkEl.textContent=renk||'Doğal';
-      const len=renkEl.textContent.length;
-      renkEl.style.fontSize=len>20?'11px':len>15?'13px':'15px';
-      document.getElementById('detayText').textContent=`${gramaj||'0.8'} gr - ${fiyat||'110'} TL`;
-      const bc=document.getElementById('barcodeCanvas'),
-            no=stokInput.value.trim();
-      if(bc&&no){
-        bc.innerHTML='';
-        try{ JsBarcode(bc,no,{format:"CODE128",width:1.5,height:30,displayValue:true,fontSize:10,textMargin:5,margin:2,background:"#fff",lineColor:"#000"});}
-        catch(e){ bc.innerHTML='<rect width="80" height="20" fill="#000" x="10" y="5"/>'; }
+      const renk   = document.getElementById('renk').value.trim(),
+            uzun   = document.getElementById('uzunluk').value.trim(),
+            gram   = document.getElementById('gramaj').value.trim(),
+            fiyat  = document.getElementById('fiyat').value.trim(),
+            stokIn = document.getElementById('stokNo');
+
+      if(!stokIn.value.trim()) stokIn.value = generateStockNo();
+
+      document.getElementById('uzunlukText').textContent = `${uzun||'70'} cm`;
+      document.getElementById('renkText').textContent    = renk||'Doğal';
+      document.getElementById('detayText').textContent   = `${gram||'0.8'} gr – ${fiyat||'110'} TL`;
+
+      const bc = document.getElementById('barcodeCanvas'),
+            no = stokIn.value.trim();
+      if(bc && no){
+        bc.innerHTML = '';
+        try{
+          JsBarcode(bc, no, {
+            format: "CODE128", width:1.5, height:30,
+            displayValue:true, fontSize:10,
+            textMargin:5, margin:2,
+            background:"#fff", lineColor:"#000"
+          });
+        }catch(e){
+          bc.innerHTML = '<rect width="80" height="20" fill="#000" x="10" y="5"/>';
+        }
       }
     }
+
     function printLabel(){
       updatePreview();
-      const wrap=document.querySelector('.label-preview-print-wrapper'),
-            orig=document.getElementById('labelPreviewHost').cloneNode(true);
-      wrap.innerHTML=''; wrap.appendChild(orig);
-      const pc=wrap.querySelector('.barcode-canvas'),
-            no=document.getElementById('stokNo').value.trim();
-      if(pc&&no){
-        try{ JsBarcode(pc,no,{format:"CODE128",width:1.5,height:30,displayValue:true,fontSize:10,textMargin:5,margin:2,background:"#fff",lineColor:"#000"});}catch{}
+      const wrap = document.querySelector('.label-preview-print-wrapper'),
+            orig = document.getElementById('labelPreviewHost').cloneNode(true);
+      wrap.innerHTML = ''; wrap.appendChild(orig);
+
+      const pc = wrap.querySelector('.barcode-canvas'),
+            no = document.getElementById('stokNo').value.trim();
+      if(pc && no){
+        try{
+          JsBarcode(pc, no, {
+            format:"CODE128", width:1.5, height:30,
+            displayValue:true, fontSize:10,
+            textMargin:5, margin:2,
+            background:"#fff", lineColor:"#000"
+          });
+        }catch{}
         setTimeout(()=>window.print(),200);
-      } else setTimeout(()=>window.print(),200);
+      } else {
+        setTimeout(()=>window.print(),200);
+      }
     }
-    window.addEventListener('load',()=>{
-      elements.forEach(id=>{ const el=document.getElementById(id); if(el)el.addEventListener('input',updatePreview);});
+
+    window.addEventListener('load', ()=>{
+      elements.forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) el.addEventListener('input', updatePreview);
+      });
       setTimeout(updatePreview,100);
     });
-    if(typeof JsBarcode==='undefined') alert('Barkod kütüphanesi yüklenemedi.');
+
+    if(typeof JsBarcode==='undefined'){
+      alert('Barkod kütüphanesi yüklenemedi.');
+    }
   </script>
 </body>
 </html>
