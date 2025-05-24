@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ICONE - Etiket ve Barkod Oluşturucu</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; gap: 30px; align-items: flex-start; }
+        .container, .preview-container { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); flex: 1; max-width: 400px; }
+        h1 { color: #333; text-align: center; margin-bottom: 30px; font-size: 24px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; font-size: 14px; }
+        input { width: 100%; padding: 12px 15px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; transition: all 0.3s ease; box-sizing: border-box; }
+        input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+        .btn { background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.3s ease; width: 100%; margin-top: 10px; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
+        .label-preview { width: 113.39px; height: 226.77px; border: 1px solid #000; background: white; margin: 20px auto; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: flex-start; }
+        .label-content { width: 100%; height: 170.08px; padding: 5px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center; }
+        .brand-section { width: 100%; text-align: center; margin-bottom: 3px; }
+        .logo-image { max-height: 40px; margin-bottom: 5px; display: none; }
+        .brand-title { font-family: 'Times New Roman', Times, serif; font-weight: bold; font-size: 30px; color: #000; margin: 0; line-height: 1; }
+        .brand-subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 7.5px; color: #000; margin: 1px 0 0 0; }
+        .length-section { margin: 5px 0; }
+        .length-section span { font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: bold; color: #000; }
+        .product-info { font-family: Arial, Helvetica, sans-serif; color: #000; margin: 3px 0; text-align: center; }
+        .product-info span { display: block; }
+        .qr-section { display: flex; align-items: center; justify-content: center; margin-bottom: 2px; width: 100%; }
+        .qr-code { width: 38px; height: 38px; }
+        @media print {
+            .label-preview-print-wrapper { display: block !important; width: 40mm; height: 80mm; page-break-after: always; }
+            .label-preview { width: 40mm; height: 80mm; border: none; box-shadow: none; }
+            .label-content { height: 60mm; padding: 1.5mm; }
+            .brand-title { font-size: 8mm; }
+            .brand-subtitle { font-size: 2mm; }
+            .length-section span, .product-info span { font-size: 4mm; }
+            .qr-code { width: 10mm; height: 10mm; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>THE ICONE</h1>
+        <form id="labelForm">
+            <div class="form-group">
+                <label for="renk">Renk:</label>
+                <input type="text" id="renk" value="Doğal" placeholder="Örn: Koyu Kahve" required>
+            </div>
+            <div class="form-group">
+                <label for="uzunluk">Uzunluk (cm):</label>
+                <input type="number" id="uzunluk" min="30" max="100" step="5" value="70" required>
+            </div>
+            <div class="form-group">
+                <label for="gramaj">Gramaj (gr):</label>
+                <input type="number" id="gramaj" min="0.1" max="2" step="0.1" value="0.8" required>
+            </div>
+            <div class="form-group">
+                <label for="fiyat">Fiyat (TL):</label>
+                <input type="number" id="fiyat" min="0" step="0.01" value="110" required>
+            </div>
+            <div class="form-group">
+                <label for="stokNo">Stok No (QR için):</label>
+                <input type="text" id="stokNo" placeholder="Otomatik oluşturulacak" readonly>
+            </div>
+            <div class="form-group">
+                <label for="logoInput">Logo (PNG):</label>
+                <input type="file" id="logoInput" accept="image/png">
+            </div>
+        </form>
+        <button type="button" class="btn" onclick="printLabel()" style="background: linear-gradient(45deg, #27ae50, #2ecc71);">Yazdır</button>
+    </div>
+    <div class="preview-container">
+        <h1>Önizleme</h1>
+        <div class="label-preview" id="labelPreviewHost">
+            <div class="label-content">
+                <div class="brand-section">
+                    <img id="logoImage" class="logo-image" src="" alt="Logo">
+                    <div class="brand-title">THE<br>ICONE</div>
+                    <div class="brand-subtitle">women hair extensions & beauty</div>
+                </div>
+                <div class="length-section">
+                    <span id="uzunlukText">70 cm</span>
+                </div>
+                <div class="product-info">
+                    <span id="renkText">Doğal</span>
+                    <span id="detayText">0.8 gr - 110 TL</span>
+                </div>
+                <div class="qr-section">
+                    <canvas class="qr-code"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="label-preview-print-wrapper" style="display:none;"></div>
+    <script>
+        let labelCounter = 1;
+        const elements = ['renk','uzunluk','gramaj','fiyat'];
+        function generateStockNo() {
+            const d = new Date();
+            return `IC${d.getFullYear().toString().slice(-2)}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}${String(labelCounter++).padStart(3,'0')}`;
+        }
+        function updatePreview() {
+            const renk = document.getElementById('renk').value;
+            const uzunluk = document.getElementById('uzunluk').value;
+            const gramaj = document.getElementById('gramaj').value;
+            const fiyat = document.getElementById('fiyat').value;
+            if(!renk||!uzunluk||!gramaj||!fiyat) return;
+            const stokInput = document.getElementById('stokNo');
+            if(!stokInput.value) stokInput.value = generateStockNo();
+            document.getElementById('uzunlukText').textContent = `${uzunluk} cm`;
+            const renkEl = document.getElementById('renkText');
+            renkEl.textContent = renk;
+            const len = renk.length;
+            renkEl.style.fontSize = len>20 ? '11px' : len>15 ? '13px' : '15px';
+            document.getElementById('detayText').textContent = `${gramaj} gr - ${fiyat} TL`;
+            QRCode.toCanvas(document.querySelector('#labelPreviewHost .qr-code'), stokInput.value, {width:38, height:38, margin:1, errorCorrectionLevel:'M'});
+        }
+        window.onload = () => {
+            elements.forEach(id => document.getElementById(id).addEventListener('input', updatePreview));
+            document.getElementById('logoInput').addEventListener('change', updatePreview);
+            updatePreview();
+        };
+        function printLabel() {
+            updatePreview();
+            const wrapper = document.querySelector('.label-preview-print-wrapper');
+            wrapper.innerHTML = `<div class="label-preview">${document.getElementById('labelPreviewHost').innerHTML}</div>`;
+            QRCode.toCanvas(wrapper.querySelector('.qr-code'), document.getElementById('stokNo').value, {width:38, height:38, margin:1, errorCorrectionLevel:'M'}, () => window.print());
+        }
+    </script>
+</body>
+</html>
