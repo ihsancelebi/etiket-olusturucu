@@ -83,71 +83,66 @@
             height: 226.77px;
             border: 1px solid #000;
             background: white;
-            margin: 20px auto;
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+            align-items: center;
         }
         .label-content {
             width: 100%;
-            height: 170.08px;
             padding: 5px;
             display: flex;
             flex-direction: column;
-            justify-content: space-around; /* space-evenly'den space-around'a değiştirildi */
+            justify-content: space-around;
             align-items: center;
             text-align: center;
         }
-        .brand-section {
-            width: 100%;
+        .brand-section,
+        .length-section,
+        .product-info,
+        .barcode-section {
+            width: auto;
+            margin: 0 auto;
             text-align: center;
-            margin: 0; /* margin-bottom kaldırıldı */
         }
         .logo-image {
-            max-width: 80px;
+            max-width: 100%;
             max-height: 40px;
             margin: 0 auto;
-            display: none;
+            display: block;
             object-fit: contain;
         }
-        .brand-title {
-            display: none;
-        }
+        .brand-title,
         .brand-subtitle {
             display: none;
         }
-        .length-section {
-            margin: 0;
-        }
         .length-section span {
+            display: inline-block;
+            margin: 0 auto;
             font-family: Arial, Helvetica, sans-serif;
             font-size: 15px;
             font-weight: bold;
             color: #000;
         }
-        .product-info {
-            font-family: Arial, Helvetica, sans-serif;
-            color: #000;
-            margin: 0;
-            text-align: center;
-        }
         .product-info span {
-            display: block;
+            display: inline-block;
+            margin: 0 auto;
             font-weight: bold;
-            margin: 2px 0; /* Satırlar arası boşluk azaltıldı */
-        }
-        .barcode-section {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            width: 100%;
+            margin: 2px 0;
         }
         .barcode-canvas {
             max-width: 100px;
             height: 30px;
+            margin: 0 auto;
+        }
+
+        .preview-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
         }
 
         /* Print Styles */
@@ -178,14 +173,10 @@
             .label-content {
                 height: 60mm;
                 padding: 1.5mm;
+                text-align: center;
             }
-            .brand-title {
-                font-size: 8mm;
-            }
-            .brand-subtitle {
-                font-size: 2mm;
-            }
-            .length-section span, .product-info span {
+            .length-section span,
+            .product-info span {
                 font-size: 4mm;
             }
             .barcode-canvas {
@@ -194,7 +185,7 @@
             }
         }
 
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
@@ -231,11 +222,6 @@
                 <label for="stokNo">Stok No (Barkod için):</label>
                 <input type="text" id="stokNo" placeholder="Otomatik oluşturulacak">
             </div>
-            <div class="form-group">
-                <label for="logoInput">Logo (PNG/JPG):</label>
-                <input type="file" id="logoInput" accept="image/*">
-                <button type="button" onclick="clearLogo()" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; margin-top: 5px; font-size: 12px; cursor: pointer;">Logo Temizle</button>
-            </div>
         </form>
         <button type="button" class="btn preview-btn" onclick="updatePreview()">Önizleme Güncelle</button>
         <button type="button" class="btn print-btn" onclick="printLabel()">Yazdır</button>
@@ -246,7 +232,8 @@
         <div class="label-preview" id="labelPreviewHost">
             <div class="label-content">
                 <div class="brand-section">
-                    <img id="logoImage" class="logo-image" src="" alt="Logo">
+                    <!-- Logo yerini logo.png olarak güncelledik -->
+                    <img id="logoImage" class="logo-image" src="logo.png" alt="THE ICONE Logo">
                 </div>
                 <div class="length-section">
                     <span id="uzunlukText">70 cm</span>
@@ -282,96 +269,52 @@
             const uzunluk = document.getElementById('uzunluk').value.trim();
             const gramaj = document.getElementById('gramaj').value.trim();
             const fiyat = document.getElementById('fiyat').value.trim();
-
             const stokInput = document.getElementById('stokNo');
+
             if (!stokInput.value.trim()) {
                 stokInput.value = generateStockNo();
             }
 
-            // Önizleme elementlerini güncelle
             document.getElementById('uzunlukText').textContent = `${uzunluk || '70'} cm`;
-
             const renkEl = document.getElementById('renkText');
-            const displayRenk = renk || 'Doğal';
-            renkEl.textContent = displayRenk;
-
-            // Metin uzunluğuna göre yazı tipi boyutunu ayarla
-            const len = displayRenk.length;
-            if (len > 20) {
-                renkEl.style.fontSize = '11px';
-            } else if (len > 15) {
-                renkEl.style.fontSize = '13px';
-            } else {
-                renkEl.style.fontSize = '15px';
-            }
-            renkEl.style.fontWeight = 'bold';
+            renkEl.textContent = renk || 'Doğal';
+            const len = renkEl.textContent.length;
+            renkEl.style.fontSize = len > 20 ? '11px' : len > 15 ? '13px' : '15px';
 
             document.getElementById('detayText').textContent = `${gramaj || '0.8'} gr - ${fiyat || '110'} TL`;
 
-            // Barkod oluştur
             const barcodeCanvas = document.getElementById('barcodeCanvas');
             const stokNo = stokInput.value.trim();
-
             if (barcodeCanvas && stokNo) {
+                barcodeCanvas.innerHTML = '';
                 try {
-                    // Barkod SVG'sini temizle
-                    barcodeCanvas.innerHTML = '';
-
-                    // JsBarcode kullanarak barkod oluştur
                     JsBarcode(barcodeCanvas, stokNo, {
                         format: "CODE128",
                         width: 1.5,
                         height: 30,
-                        displayValue: false,
+                        displayValue: true,
+                        fontSize: 10,
+                        textMargin: 5,
                         margin: 2,
                         background: "#ffffff",
                         lineColor: "#000000"
                     });
                 } catch (e) {
                     console.error('Barkod oluşturma hatası:', e);
-                    // Hata durumunda basit çizgi göster
                     barcodeCanvas.innerHTML = '<rect width="80" height="20" fill="#000" x="10" y="5"/>';
                 }
             }
         }
 
-        function handleLogoUpload(event) {
-            const file = event.target.files[0];
-            const logoImg = document.getElementById('logoImage');
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    logoImg.src = e.target.result;
-                    logoImg.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function clearLogo() {
-            const logoImg = document.getElementById('logoImage');
-            const logoInput = document.getElementById('logoInput');
-
-            logoImg.style.display = 'none';
-            logoImg.src = '';
-            logoInput.value = '';
-        }
-
         function printLabel() {
-            // Önce önizlemeyi güncelle
             updatePreview();
-
-            // Yazdırma sarmalayıcısını hazırla
             const wrapper = document.querySelector('.label-preview-print-wrapper');
             const originalContent = document.getElementById('labelPreviewHost').cloneNode(true);
             wrapper.innerHTML = '';
             wrapper.appendChild(originalContent);
 
-            // Yazdırma sürümü için barkod'u yeniden oluştur
             const printBarcodeCanvas = wrapper.querySelector('.barcode-canvas');
             const stokNo = document.getElementById('stokNo').value.trim();
-
             if (printBarcodeCanvas && stokNo) {
                 try {
                     printBarcodeCanvas.innerHTML = '';
@@ -379,139 +322,33 @@
                         format: "CODE128",
                         width: 1.5,
                         height: 30,
-                        displayValue: false,
+                        displayValue: true,
+                        fontSize: 10,
+                        textMargin: 5,
                         margin: 2,
                         background: "#ffffff",
                         lineColor: "#000000"
                     });
-                    console.log('Yazdırma Barkodu başarıyla oluşturuldu');
                 } catch (error) {
                     console.error('Yazdırma Barkodu oluşturma hatası:', error);
                 }
-
-                // Yazdırma işlemini başlat
-                setTimeout(() => {
-                    try {
-                        window.print();
-                    } catch (printError) {
-                        console.error('Yazdırma hatası:', printError);
-                        // Kullanıcıya özel bir mesaj kutusu göster
-                        const messageBox = document.createElement('div');
-                        messageBox.style.cssText = `
-                            position: fixed;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                            background-color: white;
-                            padding: 20px;
-                            border-radius: 10px;
-                            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-                            z-index: 1000;
-                            text-align: center;
-                        `;
-                        messageBox.innerHTML = `
-                            <p>Yazdırma hatası oluştu. Lütfen tarayıcı ayarlarınızı kontrol edin.</p>
-                            <button onclick="this.parentNode.remove()" style="
-                                background-color: #667eea;
-                                color: white;
-                                border: none;
-                                padding: 10px 20px;
-                                border-radius: 5px;
-                                cursor: pointer;
-                                margin-top: 15px;
-                            ">Tamam</button>
-                        `;
-                        document.body.appendChild(messageBox);
-                    }
-                }, 200);
+                setTimeout(() => window.print(), 200);
             } else {
-                setTimeout(() => {
-                    try {
-                        window.print();
-                    } catch (printError) {
-                        console.error('Yazdırma hatası:', printError);
-                        // Kullanıcıya özel bir mesaj kutusu göster
-                        const messageBox = document.createElement('div');
-                        messageBox.style.cssText = `
-                            position: fixed;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                            background-color: white;
-                            padding: 20px;
-                            border-radius: 10px;
-                            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-                            z-index: 1000;
-                            text-align: center;
-                        `;
-                        messageBox.innerHTML = `
-                            <p>Yazdırma hatası oluştu. Lütfen tarayıcı ayarlarınızı kontrol edin.</p>
-                            <button onclick="this.parentNode.remove()" style="
-                                background-color: #667eea;
-                                color: white;
-                                border: none;
-                                padding: 10px 20px;
-                                border-radius: 5px;
-                                cursor: pointer;
-                                margin-top: 15px;
-                            ">Tamam</button>
-                        `;
-                        document.body.appendChild(messageBox);
-                    }
-                }, 200);
+                setTimeout(() => window.print(), 200);
             }
         }
 
-        // Olay dinleyicilerini başlat
-        window.addEventListener('load', function() {
-            // Input olay dinleyicilerini ekle
+        window.addEventListener('load', () => {
             elements.forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.addEventListener('input', updatePreview);
-                }
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', updatePreview);
             });
-
-            // Logo yükleme dinleyicisini ekle
-            const logoInput = document.getElementById('logoInput');
-            if (logoInput) {
-                logoInput.addEventListener('change', handleLogoUpload);
-            }
-
-            // İlk önizleme güncellemesi
             setTimeout(updatePreview, 100);
         });
 
-        // Eksik JsBarcode kütüphanesi için hata işleme
         if (typeof JsBarcode === 'undefined') {
-            console.error('JsBarcode kütüphanesi yüklenemedi. Lütfen internet bağlantınızı kontrol edin veya CDN erişimini doğrulayın.');
-            // Kullanıcıya özel bir mesaj kutusu göster
-            const messageBox = document.createElement('div');
-            messageBox.style.cssText = `
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background-color: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-                z-index: 1000;
-                text-align: center;
-            `;
-            messageBox.innerHTML = `
-                <p>Barkod kütüphanesi yüklenemedi. Lütfen internet bağlantınızı kontrol edin veya CDN erişimini doğrulayın.</p>
-                <button onclick="this.parentNode.remove()" style="
-                    background-color: #667eea;
-                    color: white;
-                    border: none;
-                    padding: 10px 20px;
-                    border-radius: 5px;
-                    cursor: pointer;
-                    margin-top: 15px;
-                ">Tamam</button>
-            `;
-            document.body.appendChild(messageBox);
+            console.error('JsBarcode kütüphanesi yüklenemedi.');
+            alert('Barkod kütüphanesi yüklenemedi. Lütfen bağlantınızı kontrol edin.');
         }
     </script>
 </body>
