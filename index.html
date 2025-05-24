@@ -74,15 +74,13 @@
     .preview-btn { background: linear-gradient(45deg, #3498db, #2980b9); margin-bottom: 10px; }
     .print-btn   { background: linear-gradient(45deg, #27ae60, #2ecc71); }
 
-    /* --- Etiket kutusu --- */
+    /* --- Etiket kutusu (dış border ve gölge kaldırıldı) --- */
     .label-preview {
-      position: relative;      /* iç kesim çizgisi için */
+      position: relative;      
       width: 113.39px;
       height: 226.77px;
-      border: 1px solid #000;
       background: white;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -98,7 +96,7 @@
     }
     .label-content {
       width: 100%;
-      padding: 0 5px 5px;    /* üst padding sıfır, logo üst çizgiye bitişik */
+      padding: 4mm 5px 5px;    /* logo üstten 4mm içerde */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -120,22 +118,19 @@
     .product-info,
     .barcode-section {
       width: auto;
-      margin: 5px auto;      /* biraz dikey boşluk */
+      margin: 5px auto;
       text-align: center;
     }
-    /* Renk satırı (tek satır) */
     #renkText {
       display: inline-block;
       font-weight: bold;
     }
-    /* Gramaj – Fiyat tek satır (asla wrap olmaz) */
     #detayText {
       display: inline-block;
       margin-top: 2px;
       font-weight: bold;
-      white-space: nowrap;   /* kesinlikle tek satır */
+      white-space: nowrap;   /* tek satır */
     }
-
     .barcode-canvas {
       max-width: 100px;
       height: 30px;
@@ -163,14 +158,11 @@
       .label-preview {
         width: 40mm;
         height: 80mm;
-        border:1px solid #000;
-        box-shadow:none;
-        margin:0;
+        background: white;
+        margin:0; padding:0;
       }
       .label-preview::after { border-color:#000; }
-      .label-content {
-        padding:0 1.5mm 1.5mm;
-      }
+      .label-content { padding:4mm 1.5mm 1.5mm; }
       #detayText { font-size:4mm; }
       .barcode-canvas { max-width:35mm; height:8mm; }
     }
@@ -253,13 +245,10 @@
             gram   = document.getElementById('gramaj').value.trim(),
             fiyat  = document.getElementById('fiyat').value.trim(),
             stokIn = document.getElementById('stokNo');
-
       if(!stokIn.value.trim()) stokIn.value = generateStockNo();
-
       document.getElementById('uzunlukText').textContent = `${uzun||'70'} cm`;
       document.getElementById('renkText').textContent    = renk||'Doğal';
       document.getElementById('detayText').textContent   = `${gram||'0.8'} gr – ${fiyat||'110'} TL`;
-
       const bc = document.getElementById('barcodeCanvas'),
             no = stokIn.value.trim();
       if(bc && no){
@@ -282,7 +271,6 @@
       const wrap = document.querySelector('.label-preview-print-wrapper'),
             orig = document.getElementById('labelPreviewHost').cloneNode(true);
       wrap.innerHTML = ''; wrap.appendChild(orig);
-
       const pc = wrap.querySelector('.barcode-canvas'),
             no = document.getElementById('stokNo').value.trim();
       if(pc && no){
