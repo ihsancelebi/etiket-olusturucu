@@ -4,37 +4,206 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE ICONE - Etiket ve Barkod Oluşturucu</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.3/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; gap: 30px; align-items: flex-start; }
-        .container, .preview-container { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); flex: 1; max-width: 400px; }
-        h1 { color: #333; text-align: center; margin-bottom: 30px; font-size: 24px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; font-size: 14px; }
-        input { width: 100%; padding: 12px 15px; border: 2px solid #e1e5e9; border-radius: 8px; font-size: 14px; transition: all 0.3s ease; box-sizing: border-box; }
-        input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
-        .btn { background: linear-gradient(45deg, #667eea, #764ba2); color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.3s ease; width: 100%; margin-top: 10px; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,0.4); }
-        .label-preview { width: 113.39px; height: 226.77px; border: 1px solid #000; background: white; margin: 20px auto; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; flex-direction: column; justify-content: flex-start; }
-        .label-content { width: 100%; height: 170.08px; padding: 5px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center; }
-        .brand-section { width: 100%; text-align: center; margin-bottom: 3px; }
-        .logo-image { max-height: 40px; margin-bottom: 5px; display: none; }
-        .brand-title { font-family: 'Times New Roman', Times, serif; font-weight: bold; font-size: 30px; color: #000; margin: 0; line-height: 1; }
-        .brand-subtitle { font-family: Arial, Helvetica, sans-serif; font-size: 7.5px; color: #000; margin: 1px 0 0 0; }
-        .length-section { margin: 5px 0; }
-        .length-section span { font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-weight: bold; color: #000; }
-        .product-info { font-family: Arial, Helvetica, sans-serif; color: #000; margin: 3px 0; text-align: center; }
-        .product-info span { display: block; }
-        .qr-section { display: flex; align-items: center; justify-content: center; margin-bottom: 2px; width: 100%; }
-        .qr-code { width: 38px; height: 38px; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+        .container, .preview-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            flex: 1;
+            max-width: 400px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+        }
+        .preview-btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            margin-bottom: 10px;
+        }
+        .print-btn {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+        }
+        .label-preview {
+            width: 113.39px;
+            height: 226.77px;
+            border: 1px solid #000;
+            background: white;
+            margin: 20px auto;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .label-content {
+            width: 100%;
+            height: 170.08px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around; /* space-evenly'den space-around'a değiştirildi */
+            align-items: center;
+            text-align: center;
+        }
+        .brand-section {
+            width: 100%;
+            text-align: center;
+            margin: 0; /* margin-bottom kaldırıldı */
+        }
+        .logo-image {
+            max-width: 80px;
+            max-height: 40px;
+            margin: 0 auto;
+            display: none;
+            object-fit: contain;
+        }
+        .brand-title {
+            display: none;
+        }
+        .brand-subtitle {
+            display: none;
+        }
+        .length-section {
+            margin: 0;
+        }
+        .length-section span {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            color: #000;
+        }
+        .product-info {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #000;
+            margin: 0;
+            text-align: center;
+        }
+        .product-info span {
+            display: block;
+            font-weight: bold;
+            margin: 2px 0; /* Satırlar arası boşluk azaltıldı */
+        }
+        .barcode-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            width: 100%;
+        }
+        .barcode-canvas {
+            max-width: 100px;
+            height: 30px;
+        }
+
+        /* Print Styles */
         @media print {
-            .label-preview-print-wrapper { display: block !important; width: 40mm; height: 80mm; page-break-after: always; }
-            .label-preview { width: 40mm; height: 80mm; border: none; box-shadow: none; }
-            .label-content { height: 60mm; padding: 1.5mm; }
-            .brand-title { font-size: 8mm; }
-            .brand-subtitle { font-size: 2mm; }
-            .length-section span, .product-info span { font-size: 4mm; }
-            .qr-code { width: 10mm; height: 10mm; }
+            body {
+                background: white;
+                margin: 0;
+                padding: 0;
+            }
+            .container, .preview-container {
+                display: none;
+            }
+            .label-preview-print-wrapper {
+                display: block !important;
+                width: 40mm;
+                height: 80mm;
+                page-break-after: always;
+                margin: 0;
+                padding: 0;
+            }
+            .label-preview {
+                width: 40mm;
+                height: 80mm;
+                border: 1px solid #000;
+                box-shadow: none;
+                margin: 0;
+            }
+            .label-content {
+                height: 60mm;
+                padding: 1.5mm;
+            }
+            .brand-title {
+                font-size: 8mm;
+            }
+            .brand-subtitle {
+                font-size: 2mm;
+            }
+            .length-section span, .product-info span {
+                font-size: 4mm;
+            }
+            .barcode-canvas {
+                max-width: 35mm;
+                height: 8mm;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                align-items: center;
+            }
+            .container, .preview-container {
+                max-width: 100%;
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -59,24 +228,25 @@
                 <input type="number" id="fiyat" min="0" step="0.01" value="110" required>
             </div>
             <div class="form-group">
-                <label for="stokNo">Stok No (QR için):</label>
-                <input type="text" id="stokNo" placeholder="Otomatik oluşturulacak" readonly>
+                <label for="stokNo">Stok No (Barkod için):</label>
+                <input type="text" id="stokNo" placeholder="Otomatik oluşturulacak">
             </div>
             <div class="form-group">
-                <label for="logoInput">Logo (PNG):</label>
-                <input type="file" id="logoInput" accept="image/png">
+                <label for="logoInput">Logo (PNG/JPG):</label>
+                <input type="file" id="logoInput" accept="image/*">
+                <button type="button" onclick="clearLogo()" style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; margin-top: 5px; font-size: 12px; cursor: pointer;">Logo Temizle</button>
             </div>
         </form>
-        <button type="button" class="btn" onclick="printLabel()" style="background: linear-gradient(45deg, #27ae50, #2ecc71);">Yazdır</button>
+        <button type="button" class="btn preview-btn" onclick="updatePreview()">Önizleme Güncelle</button>
+        <button type="button" class="btn print-btn" onclick="printLabel()">Yazdır</button>
     </div>
+
     <div class="preview-container">
         <h1>Önizleme</h1>
         <div class="label-preview" id="labelPreviewHost">
             <div class="label-content">
                 <div class="brand-section">
                     <img id="logoImage" class="logo-image" src="" alt="Logo">
-                    <div class="brand-title">THE<br>ICONE</div>
-                    <div class="brand-subtitle">women hair extensions & beauty</div>
                 </div>
                 <div class="length-section">
                     <span id="uzunlukText">70 cm</span>
@@ -85,46 +255,263 @@
                     <span id="renkText">Doğal</span>
                     <span id="detayText">0.8 gr - 110 TL</span>
                 </div>
-                <div class="qr-section">
-                    <canvas class="qr-code"></canvas>
+                <div class="barcode-section">
+                    <svg class="barcode-canvas" id="barcodeCanvas"></svg>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="label-preview-print-wrapper" style="display:none;"></div>
+
     <script>
         let labelCounter = 1;
-        const elements = ['renk','uzunluk','gramaj','fiyat'];
+        const elements = ['renk', 'uzunluk', 'gramaj', 'fiyat', 'stokNo'];
+
         function generateStockNo() {
             const d = new Date();
-            return `IC${d.getFullYear().toString().slice(-2)}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}${String(labelCounter++).padStart(3,'0')}`;
+            const year = d.getFullYear().toString().slice(-2);
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            const counter = String(labelCounter++).padStart(3, '0');
+            return `IC${year}${month}${day}${counter}`;
         }
+
         function updatePreview() {
-            const renk = document.getElementById('renk').value;
-            const uzunluk = document.getElementById('uzunluk').value;
-            const gramaj = document.getElementById('gramaj').value;
-            const fiyat = document.getElementById('fiyat').value;
-            if(!renk||!uzunluk||!gramaj||!fiyat) return;
+            const renk = document.getElementById('renk').value.trim();
+            const uzunluk = document.getElementById('uzunluk').value.trim();
+            const gramaj = document.getElementById('gramaj').value.trim();
+            const fiyat = document.getElementById('fiyat').value.trim();
+
             const stokInput = document.getElementById('stokNo');
-            if(!stokInput.value) stokInput.value = generateStockNo();
-            document.getElementById('uzunlukText').textContent = `${uzunluk} cm`;
+            if (!stokInput.value.trim()) {
+                stokInput.value = generateStockNo();
+            }
+
+            // Önizleme elementlerini güncelle
+            document.getElementById('uzunlukText').textContent = `${uzunluk || '70'} cm`;
+
             const renkEl = document.getElementById('renkText');
-            renkEl.textContent = renk;
-            const len = renk.length;
-            renkEl.style.fontSize = len>20 ? '11px' : len>15 ? '13px' : '15px';
-            document.getElementById('detayText').textContent = `${gramaj} gr - ${fiyat} TL`;
-            QRCode.toCanvas(document.querySelector('#labelPreviewHost .qr-code'), stokInput.value, {width:38, height:38, margin:1, errorCorrectionLevel:'M'});
+            const displayRenk = renk || 'Doğal';
+            renkEl.textContent = displayRenk;
+
+            // Metin uzunluğuna göre yazı tipi boyutunu ayarla
+            const len = displayRenk.length;
+            if (len > 20) {
+                renkEl.style.fontSize = '11px';
+            } else if (len > 15) {
+                renkEl.style.fontSize = '13px';
+            } else {
+                renkEl.style.fontSize = '15px';
+            }
+            renkEl.style.fontWeight = 'bold';
+
+            document.getElementById('detayText').textContent = `${gramaj || '0.8'} gr - ${fiyat || '110'} TL`;
+
+            // Barkod oluştur
+            const barcodeCanvas = document.getElementById('barcodeCanvas');
+            const stokNo = stokInput.value.trim();
+
+            if (barcodeCanvas && stokNo) {
+                try {
+                    // Barkod SVG'sini temizle
+                    barcodeCanvas.innerHTML = '';
+
+                    // JsBarcode kullanarak barkod oluştur
+                    JsBarcode(barcodeCanvas, stokNo, {
+                        format: "CODE128",
+                        width: 1.5,
+                        height: 30,
+                        displayValue: false,
+                        margin: 2,
+                        background: "#ffffff",
+                        lineColor: "#000000"
+                    });
+                } catch (e) {
+                    console.error('Barkod oluşturma hatası:', e);
+                    // Hata durumunda basit çizgi göster
+                    barcodeCanvas.innerHTML = '<rect width="80" height="20" fill="#000" x="10" y="5"/>';
+                }
+            }
         }
-        window.onload = () => {
-            elements.forEach(id => document.getElementById(id).addEventListener('input', updatePreview));
-            document.getElementById('logoInput').addEventListener('change', updatePreview);
-            updatePreview();
-        };
+
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            const logoImg = document.getElementById('logoImage');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    logoImg.src = e.target.result;
+                    logoImg.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function clearLogo() {
+            const logoImg = document.getElementById('logoImage');
+            const logoInput = document.getElementById('logoInput');
+
+            logoImg.style.display = 'none';
+            logoImg.src = '';
+            logoInput.value = '';
+        }
+
         function printLabel() {
+            // Önce önizlemeyi güncelle
             updatePreview();
+
+            // Yazdırma sarmalayıcısını hazırla
             const wrapper = document.querySelector('.label-preview-print-wrapper');
-            wrapper.innerHTML = `<div class="label-preview">${document.getElementById('labelPreviewHost').innerHTML}</div>`;
-            QRCode.toCanvas(wrapper.querySelector('.qr-code'), document.getElementById('stokNo').value, {width:38, height:38, margin:1, errorCorrectionLevel:'M'}, () => window.print());
+            const originalContent = document.getElementById('labelPreviewHost').cloneNode(true);
+            wrapper.innerHTML = '';
+            wrapper.appendChild(originalContent);
+
+            // Yazdırma sürümü için barkod'u yeniden oluştur
+            const printBarcodeCanvas = wrapper.querySelector('.barcode-canvas');
+            const stokNo = document.getElementById('stokNo').value.trim();
+
+            if (printBarcodeCanvas && stokNo) {
+                try {
+                    printBarcodeCanvas.innerHTML = '';
+                    JsBarcode(printBarcodeCanvas, stokNo, {
+                        format: "CODE128",
+                        width: 1.5,
+                        height: 30,
+                        displayValue: false,
+                        margin: 2,
+                        background: "#ffffff",
+                        lineColor: "#000000"
+                    });
+                    console.log('Yazdırma Barkodu başarıyla oluşturuldu');
+                } catch (error) {
+                    console.error('Yazdırma Barkodu oluşturma hatası:', error);
+                }
+
+                // Yazdırma işlemini başlat
+                setTimeout(() => {
+                    try {
+                        window.print();
+                    } catch (printError) {
+                        console.error('Yazdırma hatası:', printError);
+                        // Kullanıcıya özel bir mesaj kutusu göster
+                        const messageBox = document.createElement('div');
+                        messageBox.style.cssText = `
+                            position: fixed;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            background-color: white;
+                            padding: 20px;
+                            border-radius: 10px;
+                            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                            z-index: 1000;
+                            text-align: center;
+                        `;
+                        messageBox.innerHTML = `
+                            <p>Yazdırma hatası oluştu. Lütfen tarayıcı ayarlarınızı kontrol edin.</p>
+                            <button onclick="this.parentNode.remove()" style="
+                                background-color: #667eea;
+                                color: white;
+                                border: none;
+                                padding: 10px 20px;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                margin-top: 15px;
+                            ">Tamam</button>
+                        `;
+                        document.body.appendChild(messageBox);
+                    }
+                }, 200);
+            } else {
+                setTimeout(() => {
+                    try {
+                        window.print();
+                    } catch (printError) {
+                        console.error('Yazdırma hatası:', printError);
+                        // Kullanıcıya özel bir mesaj kutusu göster
+                        const messageBox = document.createElement('div');
+                        messageBox.style.cssText = `
+                            position: fixed;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            background-color: white;
+                            padding: 20px;
+                            border-radius: 10px;
+                            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                            z-index: 1000;
+                            text-align: center;
+                        `;
+                        messageBox.innerHTML = `
+                            <p>Yazdırma hatası oluştu. Lütfen tarayıcı ayarlarınızı kontrol edin.</p>
+                            <button onclick="this.parentNode.remove()" style="
+                                background-color: #667eea;
+                                color: white;
+                                border: none;
+                                padding: 10px 20px;
+                                border-radius: 5px;
+                                cursor: pointer;
+                                margin-top: 15px;
+                            ">Tamam</button>
+                        `;
+                        document.body.appendChild(messageBox);
+                    }
+                }, 200);
+            }
+        }
+
+        // Olay dinleyicilerini başlat
+        window.addEventListener('load', function() {
+            // Input olay dinleyicilerini ekle
+            elements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', updatePreview);
+                }
+            });
+
+            // Logo yükleme dinleyicisini ekle
+            const logoInput = document.getElementById('logoInput');
+            if (logoInput) {
+                logoInput.addEventListener('change', handleLogoUpload);
+            }
+
+            // İlk önizleme güncellemesi
+            setTimeout(updatePreview, 100);
+        });
+
+        // Eksik JsBarcode kütüphanesi için hata işleme
+        if (typeof JsBarcode === 'undefined') {
+            console.error('JsBarcode kütüphanesi yüklenemedi. Lütfen internet bağlantınızı kontrol edin veya CDN erişimini doğrulayın.');
+            // Kullanıcıya özel bir mesaj kutusu göster
+            const messageBox = document.createElement('div');
+            messageBox.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: white;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                z-index: 1000;
+                text-align: center;
+            `;
+            messageBox.innerHTML = `
+                <p>Barkod kütüphanesi yüklenemedi. Lütfen internet bağlantınızı kontrol edin veya CDN erişimini doğrulayın.</p>
+                <button onclick="this.parentNode.remove()" style="
+                    background-color: #667eea;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    margin-top: 15px;
+                ">Tamam</button>
+            `;
+            document.body.appendChild(messageBox);
         }
     </script>
 </body>
