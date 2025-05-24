@@ -78,6 +78,8 @@
         .print-btn {
             background: linear-gradient(45deg, #27ae60, #2ecc71);
         }
+
+        /* Etiket kutusu */
         .label-preview {
             width: 113.39px;
             height: 226.77px;
@@ -99,7 +101,20 @@
             align-items: center;
             text-align: center;
         }
-        .brand-section,
+
+        /* Logo bölümü tam genişlik */
+        .brand-section {
+            width: 100%;        /* Container’ı tamamen doldur */
+            margin: 0;          /* Ortadaki auto margin’e gerek kalmadı */
+            padding: 0;
+            text-align: center;
+        }
+        .logo-image {
+            width: 100%;        /* Container’ı tamamen doldur */
+            height: auto;       /* Oranı koru */
+            object-fit: contain;/* Taşmayı engelle, orantıyı koru */
+        }
+
         .length-section,
         .product-info,
         .barcode-section {
@@ -107,30 +122,16 @@
             margin: 0 auto;
             text-align: center;
         }
-        .logo-image {
-            max-width: 100%;
-            max-height: 40px;
-            margin: 0 auto;
-            display: block;
-            object-fit: contain;
-        }
-        .brand-title,
-        .brand-subtitle {
-            display: none;
-        }
-        .length-section span {
-            display: inline-block;
-            margin: 0 auto;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 15px;
-            font-weight: bold;
-            color: #000;
-        }
+        .length-section span,
         .product-info span {
             display: inline-block;
             margin: 0 auto;
             font-weight: bold;
-            margin: 2px 0;
+        }
+        .length-section span {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 15px;
+            color: #000;
         }
         .barcode-canvas {
             max-width: 100px;
@@ -145,7 +146,7 @@
             flex-direction: column;
         }
 
-        /* Print Styles */
+        /* Yazdırma ayarları */
         @media print {
             body {
                 background: white;
@@ -185,7 +186,7 @@
             }
         }
 
-        /* Responsive */
+        /* Mobil uyumluluk */
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
@@ -223,8 +224,8 @@
                 <input type="text" id="stokNo" placeholder="Otomatik oluşturulacak">
             </div>
         </form>
-        <button type="button" class="btn preview-btn" onclick="updatePreview()">Önizleme Güncelle</button>
-        <button type="button" class="btn print-btn" onclick="printLabel()">Yazdır</button>
+        <button class="btn preview-btn" onclick="updatePreview()">Önizleme Güncelle</button>
+        <button class="btn print-btn" onclick="printLabel()">Yazdır</button>
     </div>
 
     <div class="preview-container">
@@ -232,7 +233,6 @@
         <div class="label-preview" id="labelPreviewHost">
             <div class="label-content">
                 <div class="brand-section">
-                    <!-- Logo yerini logo.png olarak güncelledik -->
                     <img id="logoImage" class="logo-image" src="logo.png" alt="THE ICONE Logo">
                 </div>
                 <div class="length-section">
@@ -300,7 +300,6 @@
                         lineColor: "#000000"
                     });
                 } catch (e) {
-                    console.error('Barkod oluşturma hatası:', e);
                     barcodeCanvas.innerHTML = '<rect width="80" height="20" fill="#000" x="10" y="5"/>';
                 }
             }
@@ -317,7 +316,6 @@
             const stokNo = document.getElementById('stokNo').value.trim();
             if (printBarcodeCanvas && stokNo) {
                 try {
-                    printBarcodeCanvas.innerHTML = '';
                     JsBarcode(printBarcodeCanvas, stokNo, {
                         format: "CODE128",
                         width: 1.5,
@@ -329,9 +327,7 @@
                         background: "#ffffff",
                         lineColor: "#000000"
                     });
-                } catch (error) {
-                    console.error('Yazdırma Barkodu oluşturma hatası:', error);
-                }
+                } catch (e) {}
                 setTimeout(() => window.print(), 200);
             } else {
                 setTimeout(() => window.print(), 200);
@@ -347,8 +343,7 @@
         });
 
         if (typeof JsBarcode === 'undefined') {
-            console.error('JsBarcode kütüphanesi yüklenemedi.');
-            alert('Barkod kütüphanesi yüklenemedi. Lütfen bağlantınızı kontrol edin.');
+            alert('Barkod kütüphanesi yüklenemedi. Lütfen internet bağlantınızı kontrol edin.');
         }
     </script>
 </body>
