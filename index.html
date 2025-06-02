@@ -25,7 +25,6 @@
       flex: 1;
       max-width: 400px;
     }
-    /* Removed h1 styling as it's replaced by a logo */
     h2 {
       color: #333;
       margin-bottom: 20px;
@@ -35,10 +34,10 @@
     }
     .main-logo-container {
       text-align: center;
-      margin-bottom: 25px; /* Adjusted margin for logo */
+      margin-bottom: 25px; 
     }
     .main-logo-container img {
-      max-height: 50px; /* Adjusted max-height for main logo */
+      max-height: 50px; 
       width: auto;
     }
     .form-group { margin-bottom: 20px; }
@@ -85,7 +84,6 @@
     .bulk-btn    { background: linear-gradient(45deg, #e74c3c, #c0392b); }
     .download-btn { background: linear-gradient(45deg, #f39c12, #e67e22); }
 
-    /* File input styling */
     .file-input-wrapper {
       position: relative;
       overflow: hidden;
@@ -116,7 +114,6 @@
       box-shadow: 0 5px 15px rgba(155,89,182,0.4);
     }
 
-    /* Progress bar */
     .progress-container {
       width: 100%;
       background: #e1e5e9;
@@ -138,7 +135,6 @@
       font-weight: bold;
     }
 
-    /* Status messages */
     .status-message {
       padding: 12px;
       border-radius: 8px;
@@ -162,7 +158,6 @@
       border: 1px solid #bee5eb;
     }
 
-    /* Data preview table */
     .data-preview {
       margin: 15px 0;
       max-height: 200px;
@@ -187,11 +182,10 @@
       font-weight: 600;
     }
 
-    /* --- Etiket kutusu (sınır çizgisi yok) --- */
     .label-preview {
       position: relative;
-      width: 113.39px; /* Approx 30mm, (30mm * 3.7796px/mm) */
-      height: 226.77px; /* Approx 60mm, (60mm * 3.7795px/mm) */
+      width: 113.39px; 
+      height: 226.77px; 
       background: white;
       overflow: hidden;
       display: flex;
@@ -264,39 +258,31 @@
       display: block;
     }
 
-    .preview-container h1 { /* Styling for "Önizleme" heading */
+    .preview-container h1 { 
       color: #333;
       text-align: center;
       margin-bottom: 30px;
       font-size: 24px;
     }
 
-    /* --- Yazdırma ayarları --- */
     @media print {
       body { background: white !important; margin:0 !important; padding:0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact;}
-      .container, .preview-container > h1 /* Hide main container and "Önizleme" heading only */ { display: none !important; }
-      .preview-container { /* Ensure preview container itself is visible if it contains the print items */
-        background: none !important;
-        box-shadow: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        max-width: none !important;
-        width: auto !important;
-        flex: none !important;
+      .container, .preview-container { 
+        display: none !important; 
       }
 
       .label-preview-print-wrapper, .bulk-print-labels {
         display: block !important;
         margin:0 !important; padding:0 !important;
       }
-      .label-preview-print-wrapper .label-preview, /* Target cloned label for single print */
+      .label-preview-print-wrapper .label-preview, 
       .bulk-print-labels .label-preview {
         width: 40mm !important; 
         height: 80mm !important;
         background: white !important;
         margin:0 !important; padding:0 !important;
         border: none !important;
-        page-break-inside: avoid !important; /* Try to keep label content together */
+        page-break-inside: avoid !important; 
       }
       .label-preview-print-wrapper .label-preview::after,
       .bulk-print-labels .label-preview::after {
@@ -318,12 +304,12 @@
       .label-preview-print-wrapper .length-section,
       .bulk-print-labels .length-section { margin: 1mm 0 !important; font-size: 3.5mm !important; }
       
-      .label-preview-print-wrapper #renkText, /* Target specific elements in single print */
+      .label-preview-print-wrapper #renkText, 
       .bulk-print-labels #renkText { font-size: 3.5mm !important; font-weight: bold !important; }
       
-      .label-preview-print-wrapper #detayText, /* Target specific elements in single print */
+      .label-preview-print-wrapper #detayText, 
       .bulk-print-labels #detayText, 
-      .bulk-print-labels .product-info span[id*="detayTextBulk"] /* For bulk generated IDs */
+      .bulk-print-labels .product-info span[id*="detayTextBulk"]
       { font-size:4mm !important; font-weight: bold !important; }
       
       .label-preview-print-wrapper .barcode-section,
@@ -343,15 +329,14 @@
       .bulk-print-labels .label-preview:first-child {
         page-break-before: auto !important;
       }
-      .bulk-print-labels .label-preview:last-of-type { /* Fix for extra page */
+      .bulk-print-labels .label-preview:last-of-type { 
         page-break-after: auto !important;
       }
-      .label-preview-print-wrapper:last-of-type { /* Fix for single print potentially adding extra page */
+      .label-preview-print-wrapper:last-of-type { 
          page-break-after: auto !important;
       }
     }
 
-    /* --- Mobil uyumluluk --- */
     @media (max-width: 768px) {
       body { flex-direction: column; align-items: center; }
       .container, .preview-container { max-width:100%; width:100%; }
@@ -485,7 +470,7 @@
   <div class="bulk-print-labels" id="bulkPrintLabels"></div>
 
   <script>
-    let labelCounter = 1; // Sayaç 1'den başlar
+    // labelCounter kaldırıldı, artık kullanılmıyor.
     let bulkData = [];
     const elements = ['renk','uzunluk','gramaj','fiyat','stokNo'];
 
@@ -498,9 +483,11 @@
     }
 
     function generateStockNo(){
-      // 6 haneli sayı üretir, örn: 000001, 000002, ...
-      const cnt = String(labelCounter++).padStart(6,'0'); 
-      return cnt; 
+      // 0 ile 999999 arasında rastgele bir sayı üretir
+      const randomNumber = Math.floor(Math.random() * 1000000); 
+      // Sayıyı 6 haneye tamamlamak için başına '0' ekler
+      const stockNo = String(randomNumber).padStart(6,'0'); 
+      return stockNo; 
     }
 
     function updatePreview(){
@@ -509,7 +496,11 @@
             gram   = document.getElementById('gramaj').value.trim(),
             fiyat  = document.getElementById('fiyat').value.trim(),
             stokIn = document.getElementById('stokNo');
-      if(!stokIn.value.trim()) stokIn.value = generateStockNo();
+      
+      // Sayfa yüklendiğinde veya stokNo alanı boşsa rastgele numara ata
+      if(!stokIn.value.trim()) {
+          stokIn.value = generateStockNo();
+      }
 
       document.getElementById('uzunlukText').textContent = `${uzun||'70'} cm`;
       document.getElementById('renkText').textContent    = renk||'Doğal';
@@ -541,7 +532,8 @@
     }
 
     function printLabel(){
-      updatePreview(); 
+      // Yazdırmadan önce önizlemeyi güncellemeye gerek yok çünkü zaten güncel olmalı.
+      // updatePreview(); 
       const wrap = document.querySelector('.label-preview-print-wrapper');
       const origLabelPreviewHost = document.getElementById('labelPreviewHost');
       
@@ -558,7 +550,9 @@
       wrap.appendChild(clonedLabel);
 
       const printBarcodeCanvas = clonedLabel.querySelector('.barcode-canvas');
+      // Stok numarasını doğrudan inputtan al, çünkü updatePreview() çağrılmadı
       const stockNoValue = document.getElementById('stokNo').value.trim();
+
 
       if(printBarcodeCanvas && stockNoValue){
         try {
@@ -587,15 +581,14 @@
     function downloadTemplate() {
       const wb = XLSX.utils.book_new();
       const wsData = [
-        // Excel şablonu başlığı güncellendi
         ['Renk', 'Uzunluk', 'Gramaj', 'Fiyat', 'StokNo (6 Hane - Boş bırakılırsa otomatik oluşur)'], 
         ['Doğal', 70, 0.8, 110, ''],
-        ['Koyu Kahve', 65, 0.9, 120, '000123'], // 6 haneli örnek StokNo
+        ['Koyu Kahve', 65, 0.9, 120, '000123'], 
         ['Açık Sarı', 75, 0.7, 105, '']
       ];
       const ws = XLSX.utils.aoa_to_sheet(wsData);
       ws['!cols'] = [
-        {wch:15}, {wch:10}, {wch:10}, {wch:10}, {wch:40} // StokNo sütun genişliği arttırıldı
+        {wch:15}, {wch:10}, {wch:10}, {wch:10}, {wch:40} 
       ];
       XLSX.utils.book_append_sheet(wb, ws, 'Etiketler');
       XLSX.writeFile(wb, 'etiket_sablonu.xlsx');
@@ -704,11 +697,11 @@
             
             if (!hasRequiredData) return null; 
 
-            const stokNoHeaderName = headers.find(h => h.toLowerCase().includes('stokno')); // Excel'deki StokNo sütun adını bulur
+            const stokNoHeaderName = headers.find(h => h.toLowerCase().includes('stokno')); 
             const stokNoFromExcel = stokNoHeaderName && obj[stokNoHeaderName] ? String(obj[stokNoHeaderName]).trim() : '';
 
             if (!stokNoFromExcel) { 
-              obj.StokNo = generateStockNo();
+              obj.StokNo = generateStockNo(); // Excel'de yoksa rastgele üret
             } else {
               obj.StokNo = stokNoFromExcel; 
             }
@@ -779,7 +772,7 @@
     function createLabelElement(data) {
       const labelDiv = document.createElement('div');
       labelDiv.className = 'label-preview'; 
-      const uniqueSuffix = data.StokNo.replace(/[^a-zA-Z0-9]/g, "") + "_" + Date.now(); // Daha benzersiz bir ID için
+      const uniqueSuffix = data.StokNo.replace(/[^a-zA-Z0-9]/g, "") + "_" + Date.now(); 
       labelDiv.innerHTML = `
         <div class="label-content">
           <div class="brand-section">
@@ -859,11 +852,18 @@
     }
 
     window.addEventListener('load', () => {
+      // Stok No alanını sayfa yüklendiğinde boşaltarak rastgele numara üretilmesini sağla
+      const stokNoInput = document.getElementById('stokNo');
+      if (stokNoInput) {
+          stokNoInput.value = ''; // Bu, updatePreview'in yeni bir numara üretmesini tetikler
+      }
+
       elements.forEach(id => {
         const el = document.getElementById(id);
         if(el) el.addEventListener('input', updatePreview);
       });
-      setTimeout(updatePreview, 100); 
+      // updatePreview'i hemen çağırarak ilk rastgele numarayı oluştur
+      updatePreview(); 
 
       if (typeof JsBarcode === 'undefined') {
         console.error('JsBarcode kütüphanesi yüklenemedi.');
@@ -877,3 +877,4 @@
   </script>
 </body>
 </html>
+
