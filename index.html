@@ -25,18 +25,21 @@
       flex: 1;
       max-width: 400px;
     }
-    h1 {
-      color: #333;
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 24px;
-    }
+    /* Removed h1 styling as it's replaced by a logo */
     h2 {
       color: #333;
       margin-bottom: 20px;
       font-size: 18px;
       border-bottom: 2px solid #667eea;
       padding-bottom: 10px;
+    }
+    .main-logo-container {
+      text-align: center;
+      margin-bottom: 25px; /* Adjusted margin for logo */
+    }
+    .main-logo-container img {
+      max-height: 50px; /* Adjusted max-height for main logo */
+      width: auto;
     }
     .form-group { margin-bottom: 20px; }
     label {
@@ -194,66 +197,61 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      border: 1px solid #ccc; /* Added a light border for better visibility of the preview box itself */
+      border: 1px solid #ccc; 
     }
-    /* Kesim çizgisi: Print'teki 20mm/80mm oranına göre ayarlandı (60mm * (20/80) = 15mm) */
     .label-preview::after {
       content: "";
       position: absolute;
-      bottom: 15mm; /* (20mm_print_cutline_pos / 80mm_print_height) * 60mm_preview_height = 15mm */
+      bottom: 15mm; 
       left: 0;
       width: 100%;
       border-top: 1px dashed #000;
     }
     .label-content {
       width: 100%;
-      padding: 4mm 1.5mm 1.5mm; /* (1.5mm ~ 5.67px) */
+      padding: 4mm 1.5mm 1.5mm; 
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      box-sizing: border-box; /* Ensure padding is included in width/height */
+      box-sizing: border-box; 
     }
     .brand-section {
       width: 100%;
       margin: 0;
       padding: 0;
       text-align: center;
-      /* Added a small bottom margin to create some space below the logo */
       margin-bottom: 2mm; 
     }
     .logo-image {
       width: 100%;
       height: auto;
       object-fit: contain;
-      max-height: 30mm; /* Adjusted max-height for preview for potentially better balance */
-                         /* Original was 40mm, this can be tweaked further */
+      max-height: 30mm; 
     }
-    .length-section { margin: 1mm 0; font-size: 2.8mm; } /* Approx 1.3mm, adjusted font size slightly */
+    .length-section { margin: 1mm 0; font-size: 2.8mm; } 
     .length-section span {
       display: inline-block;
       font-weight: bold;
     }
-    .product-info { margin: 1mm 0; } /* Approx 1.3mm */
+    .product-info { margin: 1mm 0; } 
     
     #renkText{
         display: inline-block;
         font-weight: bold;
-        font-size: 2.8mm; /* Adjusted font size slightly */
+        font-size: 2.8mm; 
     }
     #detayText {
       display: inline-block;
       font-weight: bold;
-      margin-top: 0.5mm; /* Approx 0.5mm */
+      margin-top: 0.5mm; 
       white-space: nowrap;
-      /* (4mm_print_font / 80mm_print_height) * 60mm_preview_height = 3mm */
       font-size: 3mm; 
     }
 
-    /* Barkod bölümü: Kesim çizgisinin 1mm üstünde olacak şekilde ayarlandı (15mm + 1mm = 16mm) */
     .barcode-section {
       position: absolute;
-      bottom: 16mm; /* New cutline is 15mm, so 15mm + 1mm = 16mm */
+      bottom: 16mm; 
       left: 0;
       width: 100%;
       display: flex;
@@ -261,94 +259,95 @@
     }
     .barcode-canvas {
       max-width: 90%;
-      /* (16mm_print_bc_height / 80mm_print_label_height) * 60mm_preview_label_height = 12mm */
-      height: 12mm; /* 12mm ~ 45.35px */
+      height: 12mm; 
       margin: 0 auto;
       display: block;
     }
 
-    .preview-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+    .preview-container h1 { /* Styling for "Önizleme" heading */
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 24px;
     }
 
     /* --- Yazdırma ayarları --- */
     @media print {
-      body { background: white; margin:0; padding:0; }
-      .container, .preview-container { display: none; }
-      .label-preview-print-wrapper {
+      body { background: white !important; margin:0 !important; padding:0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact;}
+      .container, .preview-container > h1 /* Hide main container and "Önizleme" heading only */ { display: none !important; }
+      .preview-container { /* Ensure preview container itself is visible if it contains the print items */
+        background: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: none !important;
+        width: auto !important;
+        flex: none !important;
+      }
+
+      .label-preview-print-wrapper, .bulk-print-labels {
         display: block !important;
-        width: 40mm; height: 80mm;
-        page-break-after: always;
-        margin:0; padding:0;
+        margin:0 !important; padding:0 !important;
       }
-      .label-preview { /* This will apply to the cloned label inside .label-preview-print-wrapper */
-        width: 40mm; height: 80mm;
-        background: white;
-        margin:0; padding:0;
-        border: none; /* Remove preview border for print */
-      }
-      .label-preview::after {
-        border-color:#000;
-        bottom: 20mm; /* Print specific cut line position */
-      }
-      .label-content { padding:4mm 1.5mm 1.5mm; }
-      .brand-section {
-          margin-bottom: 2mm; /* Consistent margin for print */
-      }
-      .logo-image {
-          max-height: 35mm; /* Allow logo to be a bit larger in print if space allows */
-      }
-      .length-section { margin: 1mm 0; font-size: 3.5mm; }
-      #renkText { font-size: 3.5mm; }
-      #detayText { font-size:4mm; } /* Print specific font size */
-      
-      .barcode-section {
-        bottom: 21mm; /* Print specific barcode position */
-      }
-      .barcode-canvas {
-        max-width: 90%;
-        height: 16mm; /* Print specific barcode height */
-      }
-      .bulk-print-labels {
-        display: block !important;
-      }
+      .label-preview-print-wrapper .label-preview, /* Target cloned label for single print */
       .bulk-print-labels .label-preview {
-        width: 40mm; 
-        height: 80mm;
-        background: white;
-        margin: 0; 
-        padding: 0;
-        page-break-before: always;
-        page-break-after: always;
-        border: none; /* Remove preview border for print */
+        width: 40mm !important; 
+        height: 80mm !important;
+        background: white !important;
+        margin:0 !important; padding:0 !important;
+        border: none !important;
+        page-break-inside: avoid !important; /* Try to keep label content together */
+      }
+      .label-preview-print-wrapper .label-preview::after,
+      .bulk-print-labels .label-preview::after {
+        border-color:#000 !important;
+        bottom: 20mm !important; 
+      }
+      .label-preview-print-wrapper .label-content,
+      .bulk-print-labels .label-content { 
+          padding:4mm 1.5mm 1.5mm !important; 
+      }
+      .label-preview-print-wrapper .brand-section,
+      .bulk-print-labels .brand-section {
+          margin-bottom: 2mm !important; 
+      }
+      .label-preview-print-wrapper .logo-image,
+      .bulk-print-labels .logo-image {
+          max-height: 35mm !important; 
+      }
+      .label-preview-print-wrapper .length-section,
+      .bulk-print-labels .length-section { margin: 1mm 0 !important; font-size: 3.5mm !important; }
+      
+      .label-preview-print-wrapper #renkText, /* Target specific elements in single print */
+      .bulk-print-labels #renkText { font-size: 3.5mm !important; font-weight: bold !important; }
+      
+      .label-preview-print-wrapper #detayText, /* Target specific elements in single print */
+      .bulk-print-labels #detayText, 
+      .bulk-print-labels .product-info span[id*="detayTextBulk"] /* For bulk generated IDs */
+      { font-size:4mm !important; font-weight: bold !important; }
+      
+      .label-preview-print-wrapper .barcode-section,
+      .bulk-print-labels .barcode-section {
+        bottom: 21mm !important; 
+      }
+      .label-preview-print-wrapper .barcode-canvas,
+      .bulk-print-labels .barcode-canvas {
+        max-width: 90% !important;
+        height: 16mm !important; 
+      }
+      
+      .bulk-print-labels .label-preview {
+        page-break-before: always !important;
+        page-break-after: always !important;
       }
       .bulk-print-labels .label-preview:first-child {
-        page-break-before: auto;
+        page-break-before: auto !important;
       }
-      /* Yazı kalınlıkları düzeltmesi */
-      .bulk-print-labels .length-section span,
-      .bulk-print-labels .product-info span { /* This includes #renkText and #detayText */
-        font-weight: bold !important;
+      .bulk-print-labels .label-preview:last-of-type { /* Fix for extra page */
+        page-break-after: auto !important;
       }
-      .bulk-print-labels .brand-section { margin-bottom: 2mm;}
-      .bulk-print-labels .logo-image { max-height: 35mm; }
-      .bulk-print-labels .length-section { margin: 1mm 0; font-size: 3.5mm !important; }
-      .bulk-print-labels #renkText { font-size: 3.5mm !important; }
-      .bulk-print-labels #detayText { /* Ensure print font size for bulk */
-        font-size: 4mm !important;
-      }
-      .bulk-print-labels .label-content { 
-        padding:4mm 1.5mm 1.5mm; 
-      }
-      .bulk-print-labels .barcode-section {
-        bottom: 21mm; /* Print specific barcode position for bulk */
-      }
-      .bulk-print-labels .barcode-canvas {
-        max-width: 90%;
-        height: 16mm; /* Print specific barcode height for bulk */
+      .label-preview-print-wrapper:last-of-type { /* Fix for single print potentially adding extra page */
+         page-break-after: auto !important;
       }
     }
 
@@ -392,14 +391,15 @@
 </head>
 <body>
   <div class="container">
-    <h1>THE ICONE</h1>
+    <div class="main-logo-container">
+      <img src="logo.png" alt="THE ICONE Logo" onerror="this.style.display='none'; console.error('Ana logo yüklenemedi: logo.png')">
+    </div>
     
     <div class="tabs">
       <button class="tab active" onclick="switchTab('single')">Tekil Etiket</button>
       <button class="tab" onclick="switchTab('bulk')">Toplu Etiket</button>
     </div>
 
-    <!-- Tekil Etiket Sekmesi -->
     <div id="singleTab" class="tab-content active">
       <form id="labelForm">
         <div class="form-group">
@@ -427,7 +427,6 @@
       <button class="btn print-btn" onclick="printLabel()">Yazdır</button>
     </div>
 
-    <!-- Toplu Etiket Sekmesi -->
     <div id="bulkTab" class="tab-content">
       <h2>Excel Dosyasından Toplu Etiket</h2>
       
@@ -466,8 +465,7 @@
     <div class="label-preview" id="labelPreviewHost">
       <div class="label-content">
         <div class="brand-section">
-          <!-- UPDATED IMAGE SRC -->
-          <img id="logoImage" class="logo-image" src="logo.png" alt="THE ICONE Logo" onerror="this.style.display='none'; console.error('Logo image not found: logo.png')">
+          <img id="logoImage" class="logo-image" src="logo.png" alt="THE ICONE Logo" onerror="this.style.display='none'; console.error('Etiket logosu yüklenemedi: logo.png')">
         </div>
         <div class="length-section">
           <span id="uzunlukText">70 cm</span>
@@ -501,11 +499,11 @@
 
     function generateStockNo(){
       const d = new Date(),
-            y = d.getFullYear().toString().slice(-2),
-            m = String(d.getMonth()+1).padStart(2,'0'),
-            day = String(d.getDate()).padStart(2,'0'),
-            cnt = String(labelCounter++).padStart(3,'0');
-      return `IC${y}${m}${day}${cnt}`;
+            y = d.getFullYear().toString().slice(-2), // YY
+            m = String(d.getMonth()+1).padStart(2,'0'), // MM
+            // day = String(d.getDate()).padStart(2,'0'), // DD - removed for 8 char
+            cnt = String(labelCounter++).padStart(2,'0'); // NN (2-digit counter)
+      return `IC${y}${m}${cnt}`; // ICYYMMNN - 8 characters
     }
 
     function updatePreview(){
@@ -523,25 +521,25 @@
       const bc = document.getElementById('barcodeCanvas'),
             no = stokIn.value.trim();
       if(bc && no){
-        bc.innerHTML = ''; // Clear previous barcode
+        bc.innerHTML = ''; 
         try {
           JsBarcode(bc, no, {
             format: "CODE128",
-            width: 1.5, // Bar width
-            height: 45, // Approx 12mm, proportional to preview label height.
+            width: 1.5, 
+            height: 45, 
             displayValue: true,
             fontSize: 10,
-            textMargin: 5, // Margin between text and barcode
-            margin: 2,     // Margin around the barcode
+            textMargin: 5, 
+            margin: 2,     
             background: "#fff",
             lineColor: "#000"
           });
         } catch(e){
-          console.error("Barcode generation error for preview:", e);
-          bc.innerHTML = '<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="red" font-size="8">Barcode Error</text>';
+          console.error("Barkod oluşturma hatası (önizleme):", e);
+          bc.innerHTML = '<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="red" font-size="8">Barkod Hatası</text>';
         }
       } else if (bc) {
-        bc.innerHTML = ''; // Clear if no stock number
+        bc.innerHTML = ''; 
       }
     }
 
@@ -551,7 +549,7 @@
       const origLabelPreviewHost = document.getElementById('labelPreviewHost');
       
       if (!origLabelPreviewHost) {
-          console.error("Label preview host element not found for printing.");
+          console.error("Yazdırma için etiket önizleme elemanı bulunamadı.");
           showStatus("Yazdırma hatası: Önizleme elemanı bulunamadı.", "error");
           return;
       }
@@ -570,7 +568,7 @@
           JsBarcode(printBarcodeCanvas, stockNoValue, {
             format: "CODE128",
             width: 1.5, 
-            height: 60,  // This height (approx 16mm) is for the print version.
+            height: 60,  
             displayValue: true,
             fontSize: 10,
             textMargin: 5,
@@ -579,8 +577,8 @@
             lineColor: "#000"
           });
         } catch(e){
-          console.error("Barcode generation error for print:", e);
-           printBarcodeCanvas.innerHTML = '<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="red" font-size="8">Barcode Error</text>';
+          console.error("Barkod oluşturma hatası (yazdırma):", e);
+           printBarcodeCanvas.innerHTML = '<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="red" font-size="8">Barkod Hatası</text>';
         }
       } else if (printBarcodeCanvas) {
           printBarcodeCanvas.innerHTML = ''; 
@@ -592,14 +590,14 @@
     function downloadTemplate() {
       const wb = XLSX.utils.book_new();
       const wsData = [
-        ['Renk', 'Uzunluk', 'Gramaj', 'Fiyat', 'StokNo'],
+        ['Renk', 'Uzunluk', 'Gramaj', 'Fiyat', 'StokNo (Boş bırakılırsa otomatik oluşur)'], // Updated header for clarity
         ['Doğal', 70, 0.8, 110, ''],
-        ['Koyu Kahve', 65, 0.9, 120, ''],
+        ['Koyu Kahve', 65, 0.9, 120, 'IC240101'], // Example with StokNo
         ['Açık Sarı', 75, 0.7, 105, '']
       ];
       const ws = XLSX.utils.aoa_to_sheet(wsData);
       ws['!cols'] = [
-        {wch:15}, {wch:10}, {wch:10}, {wch:10}, {wch:15}
+        {wch:15}, {wch:10}, {wch:10}, {wch:10}, {wch:30} // Increased width for StokNo column
       ];
       XLSX.utils.book_append_sheet(wb, ws, 'Etiketler');
       XLSX.writeFile(wb, 'etiket_sablonu.xlsx');
@@ -635,9 +633,9 @@
 
     function handleFileUpload(event) {
       const file = event.target.files[0];
+      const fileInputControl = event.target; // Keep reference to the input
       if (!file) {
         updateProgress(0); 
-        // Restore default file input label text if no file is chosen after one was
         const label = document.querySelector('.file-input-label[for="excelFile"]');
         if (label) {
             label.textContent = '📁 Excel Dosyası Seç';
@@ -680,13 +678,14 @@
              document.getElementById('bulkPrintBtn').style.display = 'none';
              updateProgress(100);
              setTimeout(() => updateProgress(0), 2000);
+             fileInputControl.value = ''; // Clear file input
              return;
           }
 
           const headers = jsonData[0].map(h => String(h).trim());
           const rows = jsonData.slice(1);
           
-          const requiredHeaders = ['Renk', 'Uzunluk', 'Gramaj', 'Fiyat'];
+          const requiredHeaders = ['Renk', 'Uzunluk', 'Gramaj', 'Fiyat']; // StokNo is optional from Excel
           const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
           
           if (missingHeaders.length > 0) {
@@ -707,8 +706,12 @@
             
             if (!hasRequiredData) return null; 
 
-            if (!obj.StokNo || obj.StokNo === '') {
+            // Use StokNo from Excel if provided and valid, otherwise generate
+            const stokNoFromExcel = obj.StokNo ? String(obj.StokNo).trim() : '';
+            if (!stokNoFromExcel) { // If StokNo is empty or not present in Excel
               obj.StokNo = generateStockNo();
+            } else {
+              obj.StokNo = stokNoFromExcel; // Use the one from Excel
             }
             return obj;
           }).filter(row => row !== null); 
@@ -727,24 +730,25 @@
           setTimeout(() => updateProgress(0), 2000); 
 
         } catch (error) {
-          console.error("File upload error:", error);
+          console.error("Dosya yükleme hatası:", error);
           updateProgress(0); 
           showStatus('Hata: ' + error.message, 'error');
           document.getElementById('bulkPrintBtn').style.display = 'none';
           bulkData = []; 
           displayDataPreview(bulkData); 
           const fileInputLabel = document.querySelector('.file-input-label[for="excelFile"]');
-          if (fileInputLabel) fileInputLabel.textContent = '📁 Excel Dosyası Seç'; // Reset label on error
-          document.getElementById('excelFile').value = ''; // Clear the file input
+          if (fileInputLabel) fileInputLabel.textContent = '📁 Excel Dosyası Seç'; 
+        } finally {
+            fileInputControl.value = ''; // Clear file input so same file can be re-uploaded
         }
       };
       reader.onerror = function() {
           updateProgress(0);
           showStatus('Dosya okuma hatası oluştu.', 'error');
-          console.error("FileReader error:", reader.error);
+          console.error("FileReader hatası:", reader.error);
           const fileInputLabel = document.querySelector('.file-input-label[for="excelFile"]');
-          if (fileInputLabel) fileInputLabel.textContent = '📁 Excel Dosyası Seç'; // Reset label on error
-          document.getElementById('excelFile').value = ''; // Clear the file input
+          if (fileInputLabel) fileInputLabel.textContent = '📁 Excel Dosyası Seç'; 
+          fileInputControl.value = ''; // Clear file input
       };
       reader.readAsArrayBuffer(file);
     }
@@ -776,18 +780,19 @@
     function createLabelElement(data) {
       const labelDiv = document.createElement('div');
       labelDiv.className = 'label-preview'; 
+      // Using unique IDs for text elements in bulk print might be complex if we need to target them specifically later.
+      // For now, relying on class structure for print CSS.
       labelDiv.innerHTML = `
         <div class="label-content">
           <div class="brand-section">
-            <!-- UPDATED IMAGE SRC -->
             <img class="logo-image" src="logo.png" alt="THE ICONE Logo" onerror="this.style.display='none';">
           </div>
           <div class="length-section">
             <span style="font-weight: bold;">${data.Uzunluk || ''} cm</span>
           </div>
           <div class="product-info">
-            <span style="font-weight: bold;">${data.Renk || ''}</span><br>
-            <span id="detayTextBulk" style="font-weight: bold; margin-top: 0.5mm; white-space: nowrap; font-size: 3mm;">${data.Gramaj || ''} gr – ${data.Fiyat || ''} TL</span>
+            <span id="renkTextBulk_${data.StokNo}" style="font-weight: bold;">${data.Renk || ''}</span><br> 
+            <span id="detayTextBulk_${data.StokNo}" style="font-weight: bold; margin-top: 0.5mm; white-space: nowrap; font-size: 3mm;">${data.Gramaj || ''} gr – ${data.Fiyat || ''} TL</span>
           </div>
           <div class="barcode-section">
             <svg class="barcode-canvas"></svg>
@@ -810,8 +815,8 @@
             lineColor: "#000"
           });
         } catch(e) {
-          console.error("Barcode generation error for bulk item:", data.StokNo, e);
-          barcodeEl.innerHTML = '<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="red" font-size="8">Error</text>';
+          console.error("Toplu yazdırma için barkod oluşturma hatası:", data.StokNo, e);
+          barcodeEl.innerHTML = '<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="red" font-size="8">Hata</text>';
         }
       }
       return labelDiv;
@@ -830,7 +835,7 @@
       bulkPrintContainer.innerHTML = ''; 
 
       let processedCount = 0;
-      const chunkSize = 50; 
+      const chunkSize = 20; // Reduced chunk size for potentially better UI responsiveness during generation
       function processChunk() {
           const chunk = bulkData.slice(processedCount, processedCount + chunkSize);
           chunk.forEach((data) => {
@@ -838,10 +843,13 @@
               bulkPrintContainer.appendChild(labelElement);
           });
           processedCount += chunk.length;
-          updateProgress((processedCount / bulkData.length) * 100);
+          // Ensure progress calculation is safe
+          const progressPercent = bulkData.length > 0 ? (processedCount / bulkData.length) * 100 : 0;
+          updateProgress(progressPercent);
+
 
           if (processedCount < bulkData.length) {
-              setTimeout(processChunk, 50); 
+              setTimeout(processChunk, 30); // Slightly adjusted delay
           } else {
               showStatus(`${bulkData.length} etiket yazdırma için hazırlandı.`, 'success');
               setTimeout(() => {
@@ -872,4 +880,5 @@
   </script>
 </body>
 </html>
+
 
