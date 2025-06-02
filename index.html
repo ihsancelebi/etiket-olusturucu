@@ -12,6 +12,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      transition: all 0.2s ease; /* Global smooth transition */
     }
 
     body {
@@ -33,12 +34,12 @@
       flex: 1;
       max-width: 450px;
       border: 1px solid rgba(255,255,255,0.5);
+      animation: fadeIn 0.6s ease-out; /* Subtle animation */
     }
 
     .container:hover, .preview-container:hover {
       box-shadow: 0 12px 40px rgba(0,0,0,0.12);
       transform: translateY(-2px);
-      transition: all 0.3s ease;
     }
 
     h2 {
@@ -90,7 +91,6 @@
       border-radius: 8px;
       font-size: 14px;
       font-weight: 400;
-      transition: all 0.2s ease;
       box-sizing: border-box;
       background: #ffffff;
       color: #2d3748;
@@ -115,7 +115,6 @@
       cursor: pointer;
       font-size: 14px;
       font-weight: 500;
-      transition: all 0.2s ease;
       width: 100%;
       margin-top: 10px;
       font-family: 'Poppins', sans-serif;
@@ -164,7 +163,6 @@
       box-shadow: 0 4px 12px rgba(159,122,234,0.3);
     }
 
-    /* File input styling */
     .file-input-wrapper {
       position: relative;
       overflow: hidden;
@@ -190,7 +188,6 @@
       width: 100%;
       display: block;
       text-align: center;
-      transition: all 0.2s ease;
       font-family: 'Poppins', sans-serif;
     }
 
@@ -200,7 +197,6 @@
       box-shadow: 0 4px 12px rgba(102,126,234,0.3);
     }
 
-    /* Progress bar */
     .progress-container {
       width: 100%;
       background: #edf2f7;
@@ -223,7 +219,6 @@
       font-weight: 500;
     }
 
-    /* Status messages */
     .status-message {
       padding: 12px 16px;
       border-radius: 8px;
@@ -251,7 +246,6 @@
       border: 1px solid #90cdf4;
     }
 
-    /* Data preview table */
     .data-preview {
       margin: 15px 0;
       max-height: 200px;
@@ -284,7 +278,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* Label preview styling */
     .label-preview {
       position: relative;
       width: 113.39px;
@@ -385,7 +378,6 @@
       font-weight: 600;
     }
 
-    /* Tabs styling */
     .tabs {
       display: flex;
       margin-bottom: 25px;
@@ -405,7 +397,6 @@
       font-weight: 500;
       color: #718096;
       border-radius: 6px;
-      transition: all 0.2s ease;
       font-family: 'Poppins', sans-serif;
     }
 
@@ -431,6 +422,17 @@
     .bulk-print-labels {
       display: none;
     }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     /* Print styles */
     @media print {
@@ -441,17 +443,9 @@
         -webkit-print-color-adjust: exact; 
         print-color-adjust: exact;
       }
-      .container, .preview-container > h1 { 
+      /* Ensure both main form container and the on-screen preview container are hidden for print */
+      .container, .preview-container { 
         display: none !important; 
-      }
-      .preview-container {
-        background: none !important;
-        box-shadow: none !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        max-width: none !important;
-        width: auto !important;
-        flex: none !important;
       }
 
       .label-preview-print-wrapper, .bulk-print-labels {
@@ -525,7 +519,7 @@
       .bulk-print-labels .label-preview:last-of-type {
         page-break-after: auto !important;
       }
-      .label-preview-print-wrapper:last-of-type {
+      .label-preview-print-wrapper:last-of-type { 
         page-break-after: auto !important;
       }
     }
@@ -547,27 +541,6 @@
 
     .label-preview-print-wrapper {
       display: none;
-    }
-
-    /* Smooth transitions */
-    * {
-      transition: all 0.2s ease;
-    }
-
-    /* Subtle animations */
-    .container, .preview-container {
-      animation: fadeIn 0.6s ease-out;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
   </style>
 </head>
@@ -667,7 +640,7 @@
   <div class="bulk-print-labels" id="bulkPrintLabels"></div>
 
   <script>
-    let labelCounter = 1;
+    // labelCounter kaldırıldı, rastgele barkod kullanılacak.
     let bulkData = [];
     const elements = ['renk','uzunluk','gramaj','fiyat','stokNo'];
 
@@ -679,9 +652,10 @@
       document.getElementById(tabName + 'Tab').classList.add('active');
     }
 
-    function generateStockNo(){
-      const cnt = String(labelCounter++).padStart(6,'0'); 
-      return cnt; 
+    function generateStockNo(){ 
+      const randomNumber = Math.floor(Math.random() * 1000000); 
+      const stockNo = String(randomNumber).padStart(6,'0'); 
+      return stockNo; 
     }
 
     function updatePreview(){
@@ -690,7 +664,10 @@
             gram   = document.getElementById('gramaj').value.trim(),
             fiyat  = document.getElementById('fiyat').value.trim(),
             stokIn = document.getElementById('stokNo');
-      if(!stokIn.value.trim()) stokIn.value = generateStockNo();
+      
+      if(!stokIn.value.trim()) { 
+          stokIn.value = generateStockNo();
+      }
 
       document.getElementById('uzunlukText').textContent = `${uzun||'70'} cm`;
       document.getElementById('renkText').textContent    = renk||'Doğal';
@@ -722,7 +699,6 @@
     }
 
     function printLabel(){
-      updatePreview(); 
       const wrap = document.querySelector('.label-preview-print-wrapper');
       const origLabelPreviewHost = document.getElementById('labelPreviewHost');
       
@@ -739,7 +715,8 @@
       wrap.appendChild(clonedLabel);
 
       const printBarcodeCanvas = clonedLabel.querySelector('.barcode-canvas');
-      const stockNoValue = document.getElementById('stokNo').value.trim();
+      const stockNoValue = document.getElementById('stokNo').value.trim(); 
+
 
       if(printBarcodeCanvas && stockNoValue){
         try {
@@ -770,12 +747,12 @@
       const wsData = [
         ['Renk', 'Uzunluk', 'Gramaj', 'Fiyat', 'StokNo (6 Hane - Boş bırakılırsa otomatik oluşur)'], 
         ['Doğal', 70, 0.8, 110, ''],
-        ['Koyu Kahve', 65, 0.9, 120, '000123'],
+        ['Koyu Kahve', 65, 0.9, 120, '000123'], 
         ['Açık Sarı', 75, 0.7, 105, '']
       ];
       const ws = XLSX.utils.aoa_to_sheet(wsData);
       ws['!cols'] = [
-        {wch:15}, {wch:10}, {wch:10}, {wch:10}, {wch:40}
+        {wch:15}, {wch:10}, {wch:10}, {wch:10}, {wch:40} 
       ];
       XLSX.utils.book_append_sheet(wb, ws, 'Etiketler');
       XLSX.writeFile(wb, 'etiket_sablonu.xlsx');
@@ -884,11 +861,11 @@
             
             if (!hasRequiredData) return null; 
 
-            const stokNoHeaderName = headers.find(h => h.toLowerCase().includes('stokno'));
+            const stokNoHeaderName = headers.find(h => h.toLowerCase().includes('stokno')); 
             const stokNoFromExcel = stokNoHeaderName && obj[stokNoHeaderName] ? String(obj[stokNoHeaderName]).trim() : '';
 
             if (!stokNoFromExcel) { 
-              obj.StokNo = generateStockNo();
+              obj.StokNo = generateStockNo(); 
             } else {
               obj.StokNo = stokNoFromExcel; 
             }
@@ -959,7 +936,7 @@
     function createLabelElement(data) {
       const labelDiv = document.createElement('div');
       labelDiv.className = 'label-preview'; 
-      const uniqueSuffix = data.StokNo.replace(/[^a-zA-Z0-9]/g, "") + "_" + Date.now();
+      const uniqueSuffix = data.StokNo.replace(/[^a-zA-Z0-9]/g, "") + "_" + Date.now(); 
       labelDiv.innerHTML = `
         <div class="label-content">
           <div class="brand-section">
@@ -1024,6 +1001,7 @@
           const progressPercent = bulkData.length > 0 ? (processedCount / bulkData.length) * 100 : 0;
           updateProgress(progressPercent);
 
+
           if (processedCount < bulkData.length) {
               setTimeout(processChunk, 30); 
           } else {
@@ -1038,11 +1016,16 @@
     }
 
     window.addEventListener('load', () => {
+      const stokNoInput = document.getElementById('stokNo');
+      if (stokNoInput) {
+          stokNoInput.value = ''; // Rastgele numara üretimi için alanı temizle
+      }
+
       elements.forEach(id => {
         const el = document.getElementById(id);
         if(el) el.addEventListener('input', updatePreview);
       });
-      setTimeout(updatePreview, 100); 
+      updatePreview(); // İlk rastgele numarayı ve önizlemeyi oluştur
 
       if (typeof JsBarcode === 'undefined') {
         console.error('JsBarcode kütüphanesi yüklenemedi.');
@@ -1055,4 +1038,4 @@
     });
   </script>
 </body>
-</html>
+</ht
