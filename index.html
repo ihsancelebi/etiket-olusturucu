@@ -6,7 +6,7 @@
   <title>THE ICONE - Etiket ve Barkod Oluşturucu</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.5/JsBarcode.all.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -15,54 +15,30 @@
     }
 
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Poppins', sans-serif;
       margin: 0;
-      padding: 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-      background-attachment: fixed;
+      padding: 30px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       min-height: 100vh;
       display: flex;
       gap: 30px;
       align-items: flex-start;
-      position: relative;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: 0;
     }
 
     .container, .preview-container {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
+      background: white;
+      border-radius: 16px;
       padding: 30px;
-      box-shadow: 
-        0 20px 40px rgba(0,0,0,0.1),
-        0 0 0 1px rgba(255,255,255,0.1) inset;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
       flex: 1;
       max-width: 450px;
-      position: relative;
-      z-index: 1;
-      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.5);
     }
 
     .container:hover, .preview-container:hover {
-      transform: translateY(-5px);
-      box-shadow: 
-        0 25px 50px rgba(0,0,0,0.15),
-        0 0 0 1px rgba(255,255,255,0.2) inset;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      transform: translateY(-2px);
+      transition: all 0.3s ease;
     }
 
     h2 {
@@ -79,137 +55,114 @@
       position: absolute;
       bottom: 0;
       left: 0;
-      width: 60px;
+      width: 50px;
       height: 3px;
-      background: linear-gradient(90deg, #667eea, #764ba2);
+      background: #4299e1;
       border-radius: 2px;
     }
 
     .main-logo-container {
       text-align: center;
       margin-bottom: 30px;
-      animation: fadeInUp 0.8s ease-out;
     }
 
     .main-logo-container img {
-      max-height: 60px;
+      max-height: 50px;
       width: auto;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
     }
 
     .form-group { 
-      margin-bottom: 25px;
-      animation: fadeInUp 0.6s ease-out;
-      animation-fill-mode: both;
+      margin-bottom: 20px;
     }
-
-    .form-group:nth-child(1) { animation-delay: 0.1s; }
-    .form-group:nth-child(2) { animation-delay: 0.2s; }
-    .form-group:nth-child(3) { animation-delay: 0.3s; }
-    .form-group:nth-child(4) { animation-delay: 0.4s; }
-    .form-group:nth-child(5) { animation-delay: 0.5s; }
 
     label {
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       font-weight: 500;
-      color: #2d3748;
+      color: #4a5568;
       font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     input {
       width: 100%;
-      padding: 15px 20px;
-      border: 2px solid rgba(255,255,255,0.3);
-      border-radius: 12px;
-      font-size: 15px;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
       font-weight: 400;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       box-sizing: border-box;
-      background: rgba(255,255,255,0.9);
-      backdrop-filter: blur(10px);
+      background: #ffffff;
       color: #2d3748;
     }
 
     input:focus {
       outline: none;
-      border-color: #667eea;
-      background: rgba(255,255,255,0.95);
-      transform: translateY(-2px);
-      box-shadow: 
-        0 10px 25px rgba(102,126,234,0.2),
-        0 0 0 4px rgba(102,126,234,0.1);
+      border-color: #4299e1;
+      box-shadow: 0 0 0 3px rgba(66,153,225,0.1);
     }
 
     input::placeholder {
       color: #a0aec0;
-      font-weight: 400;
     }
 
     .btn {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #4299e1;
       color: white;
       border: none;
-      padding: 15px 30px;
-      border-radius: 12px;
+      padding: 12px 24px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      transition: all 0.3s ease;
+      font-weight: 500;
+      transition: all 0.2s ease;
       width: 100%;
-      margin-top: 15px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.5s ease;
+      margin-top: 10px;
+      font-family: 'Poppins', sans-serif;
     }
 
     .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 35px rgba(102,126,234,0.4);
-    }
-
-    .btn:hover::before {
-      left: 100%;
+      background: #3182ce;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(66,153,225,0.3);
     }
 
     .btn:active {
-      transform: translateY(-1px);
+      transform: translateY(0);
     }
 
     .preview-btn { 
-      background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%); 
-      margin-bottom: 15px; 
+      background: #48bb78; 
+      margin-bottom: 10px; 
     }
-    .preview-btn:hover { box-shadow: 0 15px 35px rgba(66,153,225,0.4); }
+    .preview-btn:hover { 
+      background: #38a169; 
+      box-shadow: 0 4px 12px rgba(72,187,120,0.3);
+    }
 
     .print-btn { 
-      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); 
+      background: #ed8936; 
     }
-    .print-btn:hover { box-shadow: 0 15px 35px rgba(72,187,120,0.4); }
+    .print-btn:hover { 
+      background: #dd6b20; 
+      box-shadow: 0 4px 12px rgba(237,137,54,0.3);
+    }
 
     .bulk-btn { 
-      background: linear-gradient(135deg, #ed64a6 0%, #d53f8c 100%); 
+      background: #e53e3e; 
     }
-    .bulk-btn:hover { box-shadow: 0 15px 35px rgba(237,100,166,0.4); }
+    .bulk-btn:hover { 
+      background: #c53030; 
+      box-shadow: 0 4px 12px rgba(229,62,62,0.3);
+    }
 
     .download-btn { 
-      background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%); 
+      background: #9f7aea; 
     }
-    .download-btn:hover { box-shadow: 0 15px 35px rgba(237,137,54,0.4); }
+    .download-btn:hover { 
+      background: #805ad5; 
+      box-shadow: 0 4px 12px rgba(159,122,234,0.3);
+    }
 
     /* File input styling */
     .file-input-wrapper {
@@ -217,7 +170,7 @@
       overflow: hidden;
       display: inline-block;
       width: 100%;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
 
     .file-input {
@@ -226,59 +179,40 @@
     }
 
     .file-input-label {
-      background: linear-gradient(135deg, #9f7aea 0%, #805ad5 100%);
+      background: #667eea;
       color: white;
       border: none;
-      padding: 15px 30px;
-      border-radius: 12px;
+      padding: 12px 24px;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-weight: 500;
       width: 100%;
       display: block;
       text-align: center;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .file-input-label::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.5s ease;
+      transition: all 0.2s ease;
+      font-family: 'Poppins', sans-serif;
     }
 
     .file-input-label:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 35px rgba(159,122,234,0.4);
-    }
-
-    .file-input-label:hover::before {
-      left: 100%;
+      background: #5a67d8;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102,126,234,0.3);
     }
 
     /* Progress bar */
     .progress-container {
       width: 100%;
-      background: rgba(255,255,255,0.2);
-      border-radius: 12px;
-      margin: 20px 0;
+      background: #edf2f7;
+      border-radius: 8px;
+      margin: 15px 0;
       overflow: hidden;
       display: none;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.3);
     }
 
     .progress-bar {
-      height: 25px;
-      background: linear-gradient(90deg, #48bb78, #38a169);
+      height: 20px;
+      background: #48bb78;
       width: 0%;
       transition: width 0.3s ease;
       display: flex;
@@ -286,70 +220,68 @@
       justify-content: center;
       color: white;
       font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-weight: 500;
     }
 
     /* Status messages */
     .status-message {
-      padding: 15px 20px;
-      border-radius: 12px;
-      margin: 20px 0;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin: 15px 0;
       font-size: 14px;
       font-weight: 500;
       display: none;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.3);
     }
 
     .status-success {
-      background: rgba(72,187,120,0.2);
+      background: #c6f6d5;
       color: #2f855a;
+      border: 1px solid #9ae6b4;
     }
 
     .status-error {
-      background: rgba(245,101,101,0.2);
+      background: #fed7d7;
       color: #c53030;
+      border: 1px solid #feb2b2;
     }
 
     .status-info {
-      background: rgba(66,153,225,0.2);
+      background: #bee3f8;
       color: #2b6cb0;
+      border: 1px solid #90cdf4;
     }
 
     /* Data preview table */
     .data-preview {
-      margin: 20px 0;
-      max-height: 250px;
+      margin: 15px 0;
+      max-height: 200px;
       overflow-y: auto;
-      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
       display: none;
-      background: rgba(255,255,255,0.9);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.3);
+      background: white;
     }
 
     .data-preview table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .data-preview th,
     .data-preview td {
-      padding: 12px 15px;
+      padding: 8px 12px;
       text-align: left;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
+      border-bottom: 1px solid #edf2f7;
     }
 
     .data-preview th {
-      background: rgba(102,126,234,0.1);
+      background: #f7fafc;
       font-weight: 600;
-      color: #2d3748;
+      color: #4a5568;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      font-size: 12px;
     }
 
     /* Label preview styling */
@@ -363,7 +295,7 @@
       flex-direction: column;
       align-items: center;
       border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
       border: 1px solid #e2e8f0;
     }
 
@@ -449,56 +381,47 @@
       color: #2d3748;
       text-align: center;
       margin-bottom: 30px;
-      font-size: 28px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: fadeInUp 0.8s ease-out;
+      font-size: 24px;
+      font-weight: 600;
     }
 
     /* Tabs styling */
     .tabs {
       display: flex;
       margin-bottom: 25px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 12px;
-      padding: 5px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.2);
+      background: #f7fafc;
+      border-radius: 8px;
+      padding: 4px;
+      border: 1px solid #e2e8f0;
     }
 
     .tab {
       flex: 1;
-      padding: 12px 20px;
+      padding: 10px 16px;
       cursor: pointer;
       border: none;
       background: none;
       font-size: 14px;
-      font-weight: 600;
-      color: rgba(45,55,72,0.7);
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-weight: 500;
+      color: #718096;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      font-family: 'Poppins', sans-serif;
     }
 
     .tab.active {
-      background: rgba(255,255,255,0.9);
+      background: white;
       color: #2d3748;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      transform: translateY(-2px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .tab:hover:not(.active) {
-      background: rgba(255,255,255,0.2);
-      color: #2d3748;
+      background: rgba(255,255,255,0.5);
+      color: #4a5568;
     }
 
     .tab-content {
       display: none;
-      animation: fadeInUp 0.5s ease-out;
     }
 
     .tab-content.active {
@@ -507,31 +430,6 @@
 
     .bulk-print-labels {
       display: none;
-    }
-
-    /* Animations */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.7;
-      }
-    }
-
-    .loading {
-      animation: pulse 2s infinite;
     }
 
     /* Print styles */
@@ -546,7 +444,7 @@
       .container, .preview-container > h1 { 
         display: none !important; 
       }
-      .preview-container { /* This was previously hiding the entire preview-container, now it only hides its h1 */
+      .preview-container {
         background: none !important;
         box-shadow: none !important;
         padding: 0 !important;
@@ -555,7 +453,6 @@
         width: auto !important;
         flex: none !important;
       }
-
 
       .label-preview-print-wrapper, .bulk-print-labels {
         display: block !important;
@@ -628,7 +525,7 @@
       .bulk-print-labels .label-preview:last-of-type {
         page-break-after: auto !important;
       }
-      .label-preview-print-wrapper:last-of-type { /* Ensure single print doesn't cause extra page */
+      .label-preview-print-wrapper:last-of-type {
         page-break-after: auto !important;
       }
     }
@@ -638,17 +535,39 @@
       body { 
         flex-direction: column; 
         align-items: center; 
-        padding: 15px;
+        padding: 20px;
+        gap: 20px;
       }
       .container, .preview-container { 
         max-width: 100%; 
         width: 100%; 
-        margin-bottom: 20px;
+        margin-bottom: 0;
       }
     }
 
     .label-preview-print-wrapper {
       display: none;
+    }
+
+    /* Smooth transitions */
+    * {
+      transition: all 0.2s ease;
+    }
+
+    /* Subtle animations */
+    .container, .preview-container {
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
@@ -748,7 +667,7 @@
   <div class="bulk-print-labels" id="bulkPrintLabels"></div>
 
   <script>
-    let labelCounter = 1; // Stok No için sayaç (yeni arayüzle birlikte gelen JS'de bu vardı)
+    let labelCounter = 1;
     let bulkData = [];
     const elements = ['renk','uzunluk','gramaj','fiyat','stokNo'];
 
@@ -760,7 +679,7 @@
       document.getElementById(tabName + 'Tab').classList.add('active');
     }
 
-    function generateStockNo(){ // Bu fonksiyon yeni arayüzle gelen JS'den. Rastgele değil, sıralı.
+    function generateStockNo(){
       const cnt = String(labelCounter++).padStart(6,'0'); 
       return cnt; 
     }
@@ -771,12 +690,7 @@
             gram   = document.getElementById('gramaj').value.trim(),
             fiyat  = document.getElementById('fiyat').value.trim(),
             stokIn = document.getElementById('stokNo');
-      
-      // Yeni arayüzle gelen JS'de, sayfa yüklendiğinde stokNo alanı boşsa sıralı numara atanır.
-      // Rastgele numara için olan önceki mantık burada yok.
-      if(!stokIn.value.trim()) {
-          stokIn.value = generateStockNo();
-      }
+      if(!stokIn.value.trim()) stokIn.value = generateStockNo();
 
       document.getElementById('uzunlukText').textContent = `${uzun||'70'} cm`;
       document.getElementById('renkText').textContent    = renk||'Doğal';
@@ -808,7 +722,6 @@
     }
 
     function printLabel(){
-      // Yeni arayüzle gelen JS'de printLabel içinde updatePreview çağrılıyor.
       updatePreview(); 
       const wrap = document.querySelector('.label-preview-print-wrapper');
       const origLabelPreviewHost = document.getElementById('labelPreviewHost');
@@ -827,7 +740,6 @@
 
       const printBarcodeCanvas = clonedLabel.querySelector('.barcode-canvas');
       const stockNoValue = document.getElementById('stokNo').value.trim();
-
 
       if(printBarcodeCanvas && stockNoValue){
         try {
@@ -858,12 +770,12 @@
       const wsData = [
         ['Renk', 'Uzunluk', 'Gramaj', 'Fiyat', 'StokNo (6 Hane - Boş bırakılırsa otomatik oluşur)'], 
         ['Doğal', 70, 0.8, 110, ''],
-        ['Koyu Kahve', 65, 0.9, 120, '000123'], 
+        ['Koyu Kahve', 65, 0.9, 120, '000123'],
         ['Açık Sarı', 75, 0.7, 105, '']
       ];
       const ws = XLSX.utils.aoa_to_sheet(wsData);
       ws['!cols'] = [
-        {wch:15}, {wch:10}, {wch:10}, {wch:10}, {wch:40} 
+        {wch:15}, {wch:10}, {wch:10}, {wch:10}, {wch:40}
       ];
       XLSX.utils.book_append_sheet(wb, ws, 'Etiketler');
       XLSX.writeFile(wb, 'etiket_sablonu.xlsx');
@@ -972,11 +884,11 @@
             
             if (!hasRequiredData) return null; 
 
-            const stokNoHeaderName = headers.find(h => h.toLowerCase().includes('stokno')); 
+            const stokNoHeaderName = headers.find(h => h.toLowerCase().includes('stokno'));
             const stokNoFromExcel = stokNoHeaderName && obj[stokNoHeaderName] ? String(obj[stokNoHeaderName]).trim() : '';
 
             if (!stokNoFromExcel) { 
-              obj.StokNo = generateStockNo(); 
+              obj.StokNo = generateStockNo();
             } else {
               obj.StokNo = stokNoFromExcel; 
             }
@@ -1047,7 +959,7 @@
     function createLabelElement(data) {
       const labelDiv = document.createElement('div');
       labelDiv.className = 'label-preview'; 
-      const uniqueSuffix = data.StokNo.replace(/[^a-zA-Z0-9]/g, "") + "_" + Date.now(); 
+      const uniqueSuffix = data.StokNo.replace(/[^a-zA-Z0-9]/g, "") + "_" + Date.now();
       labelDiv.innerHTML = `
         <div class="label-content">
           <div class="brand-section">
@@ -1112,7 +1024,6 @@
           const progressPercent = bulkData.length > 0 ? (processedCount / bulkData.length) * 100 : 0;
           updateProgress(progressPercent);
 
-
           if (processedCount < bulkData.length) {
               setTimeout(processChunk, 30); 
           } else {
@@ -1127,15 +1038,10 @@
     }
 
     window.addEventListener('load', () => {
-      // Yeni arayüzle gelen JS'de stokNoInput.value = '' kısmı yok.
-      // Bu nedenle, sayfa yüklendiğinde mevcut stokNo değeri korunur veya boşsa sıralı üretilir.
-      // Rastgele numara için olan önceki mantık burada yok.
-
       elements.forEach(id => {
         const el = document.getElementById(id);
         if(el) el.addEventListener('input', updatePreview);
       });
-      // setTimeout ile updatePreview çağrısı, yeni arayüzle gelen JS'de de var.
       setTimeout(updatePreview, 100); 
 
       if (typeof JsBarcode === 'undefined') {
