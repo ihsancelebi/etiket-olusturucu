@@ -278,12 +278,13 @@
       letter-spacing: 0.5px;
     }
 
+    /* Label preview styling */
     .label-preview {
       position: relative;
-      width: 113.39px;
-      height: 226.77px;
+      width: 113.39px; /* Approx 30mm */
+      height: 226.77px; /* Approx 60mm */
       background: white;
-      overflow: hidden;
+      overflow: hidden; /* Important for clipping */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -292,10 +293,10 @@
       border: 1px solid #e2e8f0;
     }
 
-    .label-preview::after {
+    .label-preview::after { /* Cut line */
       content: "";
       position: absolute;
-      bottom: 15mm;
+      bottom: 15mm; 
       left: 0;
       width: 100%;
       border-top: 1px dashed #000;
@@ -303,7 +304,7 @@
 
     .label-content {
       width: 100%;
-      padding: 4mm 1.5mm 1.5mm;
+      padding: 3mm 1.5mm 1mm; /* Adjusted top/bottom padding */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -316,19 +317,19 @@
       margin: 0;
       padding: 0;
       text-align: center;
-      margin-bottom: 2mm;
+      margin-bottom: 1mm; /* Adjusted margin */
     }
 
     .logo-image {
       width: 100%;
       height: auto;
       object-fit: contain;
-      max-height: 30mm;
+      max-height: 15mm; /* UPDATED: Reduced max-height for logo in preview */
     }
 
     .length-section { 
-      margin: 1mm 0; 
-      font-size: 2.8mm; 
+      margin: 0.5mm 0; /* Adjusted margin */
+      font-size: 2.5mm;  /* UPDATED: Adjusted font size */
     }
 
     .length-section span {
@@ -337,13 +338,13 @@
     }
 
     .product-info { 
-      margin: 1mm 0; 
+      margin: 0.5mm 0; /* Adjusted margin */
     }
 
     #renkText {
       display: inline-block;
       font-weight: bold;
-      font-size: 2.8mm;
+      font-size: 2.5mm; /* UPDATED: Adjusted font size */
     }
 
     #detayText {
@@ -351,12 +352,12 @@
       font-weight: bold;
       margin-top: 0.5mm;
       white-space: nowrap;
-      font-size: 3mm;
+      font-size: 2.8mm; /* UPDATED: Adjusted font size */
     }
 
     .barcode-section {
       position: absolute;
-      bottom: 16mm;
+      bottom: 16mm; /* 1mm above the 15mm cut line */
       left: 0;
       width: 100%;
       display: flex;
@@ -365,7 +366,7 @@
 
     .barcode-canvas {
       max-width: 90%;
-      height: 12mm;
+      height: 12mm; /* Approx 45px, proportional to print's 16mm barcode height */
       margin: 0 auto;
       display: block;
     }
@@ -443,7 +444,6 @@
         -webkit-print-color-adjust: exact; 
         print-color-adjust: exact;
       }
-      /* Ensure both main form container and the on-screen preview container are hidden for print */
       .container, .preview-container { 
         display: none !important; 
       }
@@ -470,32 +470,32 @@
       }
       .label-preview-print-wrapper .label-content,
       .bulk-print-labels .label-content { 
-        padding: 4mm 1.5mm 1.5mm !important; 
+        padding: 3mm 1.5mm 1mm !important; /* Consistent with preview top/bottom padding */
       }
       .label-preview-print-wrapper .brand-section,
       .bulk-print-labels .brand-section {
-        margin-bottom: 2mm !important; 
+        margin-bottom: 1.5mm !important; /* Adjusted print margin */
       }
       .label-preview-print-wrapper .logo-image,
       .bulk-print-labels .logo-image {
-        max-height: 35mm !important; 
+        max-height: 20mm !important; /* UPDATED: Reduced logo max-height for print */
       }
       .label-preview-print-wrapper .length-section,
       .bulk-print-labels .length-section { 
         margin: 1mm 0 !important; 
-        font-size: 3.5mm !important; 
+        font-size: 3mm !important; /* UPDATED: Adjusted font size for print */
       }
       
       .label-preview-print-wrapper #renkText,
       .bulk-print-labels #renkText { 
-        font-size: 3.5mm !important; 
+        font-size: 3mm !important; /* UPDATED: Adjusted font size for print */
         font-weight: bold !important; 
       }
       
       .label-preview-print-wrapper #detayText,
       .bulk-print-labels #detayText, 
       .bulk-print-labels .product-info span[id*="detayTextBulk"] {
-        font-size: 4mm !important; 
+        font-size: 3.5mm !important; /* UPDATED: Adjusted font size for print */
         font-weight: bold !important; 
       }
       
@@ -1038,4 +1038,4 @@
     });
   </script>
 </body>
-</ht
+</html>
