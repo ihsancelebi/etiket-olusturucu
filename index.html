@@ -420,7 +420,7 @@
         </div>
         <div class="form-group">
           <label for="stokNo">Stok No (Barkod için):</label>
-          <input type="text" id="stokNo" placeholder="Otomatik oluşturulacak">
+          <input type="text" id="stokNo" placeholder="Otomatik oluşturulacak (6 Hane)">
         </div>
       </form>
       <button class="btn preview-btn" onclick="updatePreview()">Önizleme Güncelle</button>
@@ -485,7 +485,7 @@
   <div class="bulk-print-labels" id="bulkPrintLabels"></div>
 
   <script>
-    let labelCounter = 1;
+    let labelCounter = 1; // Sayaç 1'den başlar
     let bulkData = [];
     const elements = ['renk','uzunluk','gramaj','fiyat','stokNo'];
 
@@ -498,12 +498,9 @@
     }
 
     function generateStockNo(){
-      const d = new Date(),
-            y = d.getFullYear().toString().slice(-2), // YY
-            m = String(d.getMonth()+1).padStart(2,'0'), // MM
-            // day = String(d.getDate()).padStart(2,'0'), // DD - removed for 8 char
-            cnt = String(labelCounter++).padStart(2,'0'); // NN (2-digit counter)
-      return `IC${y}${m}${cnt}`; // ICYYMMNN - 8 characters
+      // 6 haneli sayı üretir, örn: 000001, 000002, ...
+      const cnt = String(labelCounter++).padStart(6,'0'); 
+      return cnt; 
     }
 
     function updatePreview(){
@@ -590,14 +587,15 @@
     function downloadTemplate() {
       const wb = XLSX.utils.book_new();
       const wsData = [
-        ['Renk', 'Uzunluk', 'Gramaj', 'Fiyat', 'StokNo (Boş bırakılırsa otomatik oluşur)'], // Updated header for clarity
+        // Excel şablonu başlığı güncellendi
+        ['Renk', 'Uzunluk', 'Gramaj', 'Fiyat', 'StokNo (6 Hane - Boş bırakılırsa otomatik oluşur)'], 
         ['Doğal', 70, 0.8, 110, ''],
-        ['Koyu Kahve', 65, 0.9, 120, 'IC240101'], // Example with StokNo
+        ['Koyu Kahve', 65, 0.9, 120, '000123'], // 6 haneli örnek StokNo
         ['Açık Sarı', 75, 0.7, 105, '']
       ];
       const ws = XLSX.utils.aoa_to_sheet(wsData);
       ws['!cols'] = [
-        {wch:15}, {wch:10}, {wch:10}, {wch:10}, {wch:30} // Increased width for StokNo column
+        {wch:15}, {wch:10}, {wch:10}, {wch:10}, {wch:40} // StokNo sütun genişliği arttırıldı
       ];
       XLSX.utils.book_append_sheet(wb, ws, 'Etiketler');
       XLSX.writeFile(wb, 'etiket_sablonu.xlsx');
@@ -633,7 +631,7 @@
 
     function handleFileUpload(event) {
       const file = event.target.files[0];
-      const fileInputControl = event.target; // Keep reference to the input
+      const fileInputControl = event.target; 
       if (!file) {
         updateProgress(0); 
         const label = document.querySelector('.file-input-label[for="excelFile"]');
@@ -678,14 +676,14 @@
              document.getElementById('bulkPrintBtn').style.display = 'none';
              updateProgress(100);
              setTimeout(() => updateProgress(0), 2000);
-             fileInputControl.value = ''; // Clear file input
+             fileInputControl.value = ''; 
              return;
           }
 
           const headers = jsonData[0].map(h => String(h).trim());
           const rows = jsonData.slice(1);
           
-          const requiredHeaders = ['Renk', 'Uzunluk', 'Gramaj', 'Fiyat']; // StokNo is optional from Excel
+          const requiredHeaders = ['Renk', 'Uzunluk', 'Gramaj', 'Fiyat']; 
           const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
           
           if (missingHeaders.length > 0) {
@@ -706,12 +704,13 @@
             
             if (!hasRequiredData) return null; 
 
-            // Use StokNo from Excel if provided and valid, otherwise generate
-            const stokNoFromExcel = obj.StokNo ? String(obj.StokNo).trim() : '';
-            if (!stokNoFromExcel) { // If StokNo is empty or not present in Excel
+            const stokNoHeaderName = headers.find(h => h.toLowerCase().includes('stokno')); // Excel'deki StokNo sütun adını bulur
+            const stokNoFromExcel = stokNoHeaderName && obj[stokNoHeaderName] ? String(obj[stokNoHeaderName]).trim() : '';
+
+            if (!stokNoFromExcel) { 
               obj.StokNo = generateStockNo();
             } else {
-              obj.StokNo = stokNoFromExcel; // Use the one from Excel
+              obj.StokNo = stokNoFromExcel; 
             }
             return obj;
           }).filter(row => row !== null); 
@@ -739,7 +738,7 @@
           const fileInputLabel = document.querySelector('.file-input-label[for="excelFile"]');
           if (fileInputLabel) fileInputLabel.textContent = '📁 Excel Dosyası Seç'; 
         } finally {
-            fileInputControl.value = ''; // Clear file input so same file can be re-uploaded
+            fileInputControl.value = ''; 
         }
       };
       reader.onerror = function() {
@@ -748,7 +747,7 @@
           console.error("FileReader hatası:", reader.error);
           const fileInputLabel = document.querySelector('.file-input-label[for="excelFile"]');
           if (fileInputLabel) fileInputLabel.textContent = '📁 Excel Dosyası Seç'; 
-          fileInputControl.value = ''; // Clear file input
+          fileInputControl.value = ''; 
       };
       reader.readAsArrayBuffer(file);
     }
@@ -780,8 +779,7 @@
     function createLabelElement(data) {
       const labelDiv = document.createElement('div');
       labelDiv.className = 'label-preview'; 
-      // Using unique IDs for text elements in bulk print might be complex if we need to target them specifically later.
-      // For now, relying on class structure for print CSS.
+      const uniqueSuffix = data.StokNo.replace(/[^a-zA-Z0-9]/g, "") + "_" + Date.now(); // Daha benzersiz bir ID için
       labelDiv.innerHTML = `
         <div class="label-content">
           <div class="brand-section">
@@ -791,8 +789,8 @@
             <span style="font-weight: bold;">${data.Uzunluk || ''} cm</span>
           </div>
           <div class="product-info">
-            <span id="renkTextBulk_${data.StokNo}" style="font-weight: bold;">${data.Renk || ''}</span><br> 
-            <span id="detayTextBulk_${data.StokNo}" style="font-weight: bold; margin-top: 0.5mm; white-space: nowrap; font-size: 3mm;">${data.Gramaj || ''} gr – ${data.Fiyat || ''} TL</span>
+            <span id="renkTextBulk_${uniqueSuffix}" style="font-weight: bold;">${data.Renk || ''}</span><br> 
+            <span id="detayTextBulk_${uniqueSuffix}" style="font-weight: bold; margin-top: 0.5mm; white-space: nowrap; font-size: 3mm;">${data.Gramaj || ''} gr – ${data.Fiyat || ''} TL</span>
           </div>
           <div class="barcode-section">
             <svg class="barcode-canvas"></svg>
@@ -835,7 +833,7 @@
       bulkPrintContainer.innerHTML = ''; 
 
       let processedCount = 0;
-      const chunkSize = 20; // Reduced chunk size for potentially better UI responsiveness during generation
+      const chunkSize = 20; 
       function processChunk() {
           const chunk = bulkData.slice(processedCount, processedCount + chunkSize);
           chunk.forEach((data) => {
@@ -843,13 +841,12 @@
               bulkPrintContainer.appendChild(labelElement);
           });
           processedCount += chunk.length;
-          // Ensure progress calculation is safe
           const progressPercent = bulkData.length > 0 ? (processedCount / bulkData.length) * 100 : 0;
           updateProgress(progressPercent);
 
 
           if (processedCount < bulkData.length) {
-              setTimeout(processChunk, 30); // Slightly adjusted delay
+              setTimeout(processChunk, 30); 
           } else {
               showStatus(`${bulkData.length} etiket yazdırma için hazırlandı.`, 'success');
               setTimeout(() => {
@@ -880,5 +877,3 @@
   </script>
 </body>
 </html>
-
-
